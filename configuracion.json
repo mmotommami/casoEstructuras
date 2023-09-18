@@ -1,0 +1,75 @@
+//Todos los datos están dados en minutos
+{
+    "hora" : 0.12, //minutos
+    "colchones" :
+    [
+        {
+            "name" : "Full", 
+            "peso" : "28kg",
+            "medidas" : "137CMx191CM"
+        }, 
+        {
+            "name" : "Queen", 
+            "peso" : "41kg",
+            "medidas" : "152CMx203CM"
+        }, 
+        {
+            "name" : "Twin", 
+            "peso" : "16.5kg",
+            "medidas" : "99CMx191CM"
+        }, 
+        {
+            "name" : "King", 
+            "peso" : "54kg",
+            "medidas" : "193CMx203CM"
+        }
+    ],
+    "rutas" :  //Los tiempos están dados en minutos
+    [
+        {
+            "name" : "ruta1", 
+            "velocidad" : "50km/h",
+            "distancia" : "16km",
+            "tiempo" : 20
+        }, 
+        {
+            "name" : "ruta2",
+            "velocidad" : "50km/h",
+            "distancia" : "13km",
+            "tiempo" : 15
+        }, 
+        {
+            "name" : "ruta3",
+            "velocidad" : "50km/h",
+            "distancia" : "39km",
+            "tiempo" : 45
+        }, 
+        {
+            "name" : "ruta4",
+            "velocidad" : "50km/h",
+            "distancia" : "115km",
+            "tiempo" : 115
+        } 
+    ],
+    "camion" : 
+    {
+        "capacidad" : "1000kg",
+        "longitud" : "12m",
+        "altura" : "4m",
+        "ancho" : "2.5m"
+    },
+    "bodega" :    //Cantidad de productos en la bodega
+    {
+        "Twin" : 1000,
+        "Full" : 1000,
+        "Queen" : 900,
+        "King" : 700
+    },
+    "cargaDescarga20" :  //Los tiempos están dados en minutos
+    {
+        "Twin" : 5,
+        "Full" : 10,
+        "Queen" : 10,
+        "King" : 20
+    }
+}
