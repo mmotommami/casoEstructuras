@@ -1,30 +1,38 @@
-//Todos los datos están dados en minutos
 {
-    "hora" : 0.12, //minutos
+    "hora" : 60,
+    "cantidadCamiones" : 8,
     "colchones" :
     [
         {
             "name" : "Full", 
-            "peso" : "28kg",
-            "medidas" : "137CMx191CM"
+            "peso" : 28,
+            "ancho" : 137,
+            "largo" : 191,
+            "alto" : 30
         }, 
         {
             "name" : "Queen", 
-            "peso" : "41kg",
-            "medidas" : "152CMx203CM"
+            "peso" : 41,
+            "ancho" : 152,
+            "largo" : 203,
+            "alto" : 30
         }, 
         {
             "name" : "Twin", 
-            "peso" : "16.5kg",
-            "medidas" : "99CMx191CM"
+            "peso" : 16,
+            "ancho" : 99,
+            "largo" : 191,
+            "alto" : 30
         }, 
         {
             "name" : "King", 
-            "peso" : "54kg",
-            "medidas" : "193CMx203CM"
+            "peso" : 54,
+            "ancho" : 193,
+            "largo" : 203,
+            "alto" : 30
         }
     ],
-    "rutas" :  //Los tiempos están dados en minutos
+    "rutas" :
     [
         {
             "name" : "ruta1", 
@@ -53,19 +61,30 @@
     ],
     "camion" : 
     {
-        "capacidad" : "1000kg",
-        "longitud" : "12m",
-        "altura" : "4m",
-        "ancho" : "2.5m"
+        "capacidad" : 1000,
+        "longitud" : 12,
+        "altura" : 4,
+        "ancho" : 2.5
     },
-    "bodega" :    //Cantidad de productos en la bodega
+    "bodega" :
     {
-        "Twin" : 1000,
-        "Full" : 1000,
-        "Queen" : 900,
-        "King" : 700
+        "Twin" : 10,
+        "Full" : 8,
+        "Queen" : 20,
+        "King" : 10,
+        "tarimaSize" : 30,
+        "refillTime" : 60
     },
-    "cargaDescarga20" :  //Los tiempos están dados en minutos
+    "pedidos" : 
+    {
+        "minPedidos" : 5,
+        "maxPedidos" : 20,
+        "tiempoEntreGeneracion" : 120,
+        "minColchonesPorPedido" : 10,
+        "maxColchonesPorPedido" : 100,
+        "tiempoEntreEnvioDePedidos" : 10
+    },
+    "cargaDescarga20" :
     {
         "Twin" : 5,
         "Full" : 10,
