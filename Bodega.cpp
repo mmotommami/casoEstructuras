@@ -1,19 +1,15 @@
 #include "ConfigLoader.cpp"
 #include "TarimaGroup.cpp"
+#include "Pedido.cpp"
 #include <time.h>
 #include <stdlib.h>
 #include "Queue.h"
 #include "lista.h"
 #include <vector>
+#include "Stack.h"
+#include <string>
 
 using namespace std;
-
-struct Pedido {
-    int cantidadColchonesFull;
-    int cantidadColchonesQueen;
-    int cantidadColchonesKing;
-    int cantidadColchonesTwin;
-};
 
 class Bodega
 {
@@ -25,7 +21,7 @@ private:
     Configloader configuracion;
     Queue<Pedido *> *pedidos;
     Pedido nuevoPedido;
-    std::vector<Pedido> listaDePedidos;
+    vector<Pedido> listaDePedidos;
 
 public:
     Bodega(Configbodega pConfiguracionBodega, ConfigPedidos pConfigPedidos, Flotilla *flotillaManager)
@@ -111,9 +107,37 @@ public:
     }
 
     // thread o bien todo dentro de un thread en bodega
+    // Este método atiende un pedido cada cierta cantidad de tiempo, por lo que se debe tener un thread
+    // que llame a este método dependiendo de cada cuanto se quiera atender un pedido.
     void atenderPedidos()
     {
-        Pedido pedidoAnalizado = this->listaDePedidos.pop_back(nuevoPedido);
+        bool estado = false;
+
+        std::vector<Pedido> listaAuxiliar;
+
+        //Este while puede generar problemas, debido a que puede querer
+        //realizar un pop_back a una lista que no posee elementos
+        while(estado == false){
+
+            Pedido pedidoAnalizado = this->listaDePedidos.pop_back(nuevoPedido);
+
+            int cantidadFull = pedidoAnalizado.cantidadColchonesFull;
+            int cantidadKing = pedidoAnalizado.cantidadColchonesKing;
+            int cantidadQueen = pedidoAnalizado.cantidadColchonesQueen;
+            int cantidadTwin = pedidoAnalizado.cantidadColchonesTwin;
+            //Comprueba si se puede realizar el pedido, en caso de que sí se pueda se entra dentro del if,
+            //y dentro de este se cambia el valor booleano de "estado" a true.
+            if(comprobarCantidad("Full", cantidadFull) && comprobarCantidad("King", cantidadKing) && comprobarCantidad("Queen", cantidadQueen) && comprobarCantidad("Twin", cantidadTwin)){
+                //Si un pedido es realizado, se revisa si listaAuxiliar.size() == 0, si es el caso todo bien, pero
+                //si no lo es debemos de sacar el tamaño con el .size y generar un for que saque tantos elementos
+                //como el tamaño de la listaAuxiliar diga y lo meta al vector de pedidos.
+            } else {
+                listaAuxiliar.push_back(pedidoAnalizado);
+            }
+
+        //Si el método acaba sin que se haya realizado ningún pedido, también se deberán de ingresar los datos
+        //nuevamente a listaDePedidos
+        }
 
         //Aquí con pedidoAnalizado.<cantidad de colchones del pedido> se debe verificar si esa cantidad puede
         //ser sacada del almacen, si no puede ser sacada, en un vector auxiliar se va a meter el pedido, para probar
@@ -128,10 +152,31 @@ public:
         // Pedido currentPedido = pedidos->dequeue();
         // revisar mi lista de tarimasgroup para los tipos de colchon que hay en el pedido puedo armar el pedido
         // si no puedo armar el pedido, lo vuelvo a encolar
-        // si si lo puedo armar
+        // si sí lo puedo armar
         // saco los colchones que sean necesario de los TarimaGroup
         // segun la cantidad asi los voy tirando a los camiones
         // flotillaManager->enviar(lista de colchones que arme de la orden);
         // sleep de tiempoEntreEnvioDePedidos
     }
+
+    bool comprobarCantidad(std::string pNombre, int pCantidadColchon) {
+        Stack<ColchonStack *> modificadorTarima = tarimaGroup.getTarimasCopy();
+        for(int h = 0; h < modificadorTarima.largoPila(); h++) {
+            Stack<ColchonStack *> tarimaUnica = modificadorTarima.pop();
+            for(int k = 0; k < tarimaUnica.largoPila(); k++) {
+                Colchon colchonGuardado = tarimaUnica.pop();
+                std::string colchonInicial = colchonGuardado.getName();
+                if(colchonInicial != pNombre) {
+                    //Este espacio vacío es porque no quiero que ocurra 
+                    //nada en caso de que el tipo de colchón sea incorrecto
+                } else {
+                    if(tarimaUnica.largoPila() > pCantidadColchon) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+//    tarimas = [[{},{},{}],[{},{},{}],[{},{},{}]]
 };

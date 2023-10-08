@@ -72,7 +72,7 @@
         "Full" : 8,
         "Queen" : 20,
         "King" : 10,
-        "tarimaSize" : 30,
+        "tarimaSize" : 100,
         "refillTime" : 60
     },
     "pedidos" : 
@@ -83,12 +83,5 @@
         "minColchonesPorPedido" : 10,
         "maxColchonesPorPedido" : 100,
         "tiempoEntreEnvioDePedidos" : 10
-    },
-    "cargaDescarga20" :
-    {
-        "Twin" : 5,
-        "Full" : 10,
-        "Queen" : 10,
-        "King" : 20
     }
 }

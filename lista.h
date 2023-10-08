@@ -2,7 +2,6 @@
 #define _LISTAGENERICA_ 1
 
 #include "nodo.h"
-// #include "colchon.h"
 #include <stdlib.h>
 
 using namespace std;

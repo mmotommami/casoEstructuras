@@ -2,6 +2,7 @@
 #define CAMION_H
 
 #include "lista.h"
+#include "Stack.h"
 
 using namespace std;
 

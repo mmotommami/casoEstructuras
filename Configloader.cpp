@@ -24,11 +24,11 @@ struct ConfigColchones
 
 struct ConfigBodega
 {
-    int twinquantity;
+    int twinquantity; //Cantidad de tarimas para este tipo de colchon
     int fullquantity;
     int queenquantity;
     int kingquantity;
-    int tarimasize;
+    int tarimasize; //Cantidad de colchones por tarima
     int refilltime;
 };
 
