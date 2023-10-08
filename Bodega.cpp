@@ -121,6 +121,8 @@ public:
 
             Pedido pedidoAnalizado = this->listaDePedidos.pop_back(nuevoPedido);
 
+//listaDePedidos = [30, 20, 10, 15]
+
             int cantidadFull = pedidoAnalizado.cantidadColchonesFull;
             int cantidadKing = pedidoAnalizado.cantidadColchonesKing;
             int cantidadQueen = pedidoAnalizado.cantidadColchonesQueen;
@@ -128,6 +130,7 @@ public:
             //Comprueba si se puede realizar el pedido, en caso de que sí se pueda se entra dentro del if,
             //y dentro de este se cambia el valor booleano de "estado" a true.
             if(comprobarCantidad("Full", cantidadFull) && comprobarCantidad("King", cantidadKing) && comprobarCantidad("Queen", cantidadQueen) && comprobarCantidad("Twin", cantidadTwin)){
+
                 //Si un pedido es realizado, se revisa si listaAuxiliar.size() == 0, si es el caso todo bien, pero
                 //si no lo es debemos de sacar el tamaño con el .size y generar un for que saque tantos elementos
                 //como el tamaño de la listaAuxiliar diga y lo meta al vector de pedidos.
@@ -157,12 +160,19 @@ public:
         // segun la cantidad asi los voy tirando a los camiones
         // flotillaManager->enviar(lista de colchones que arme de la orden);
         // sleep de tiempoEntreEnvioDePedidos
+
+        int cantidadElementosA = listaAuxiliar.size();
+        for(int k = 0; k < cantidadElementosA; k++) {
+            Pedido pedidoSacado = listaAuxiliar.pop_back();
+            this->listaDePedidos.push_back(pedidoSacado);
+        }
+
     }
 
     bool comprobarCantidad(std::string pNombre, int pCantidadColchon) {
-        Stack<ColchonStack *> modificadorTarima = tarimaGroup.getTarimasCopy();
-        for(int h = 0; h < modificadorTarima.largoPila(); h++) {
-            Stack<ColchonStack *> tarimaUnica = modificadorTarima.pop();
+        Stack<ColchonStack *> copiaTarima = tarimaGroup.getTarimasCopy();
+        for(int h = 0; h < copiaTarima.largoPila(); h++) {
+            Stack<Colchon *> tarimaUnica = copiaTarima.pop();
             for(int k = 0; k < tarimaUnica.largoPila(); k++) {
                 Colchon colchonGuardado = tarimaUnica.pop();
                 std::string colchonInicial = colchonGuardado.getName();
@@ -172,11 +182,53 @@ public:
                 } else {
                     if(tarimaUnica.largoPila() > pCantidadColchon) {
                         return true;
+                        //En este punto, el método podría empezar a sacar
+                        //elementos de dicha tarima y meterlo en el camion
                     }
                 }
             }
         }
         return false;
     }
-//    tarimas = [[{},{},{}],[{},{},{}],[{},{},{}]]
+//          tarimas = [[{King}, {King}, {King}], [{Queen}, {Queen}, {Queen}]]
+    void cargarCamion(std::string pNombre, int pCantidadColchon) {
+        //vector temporal mientras se define una pila para camion
+        std::vector<Colchon> camion;
+        std::vector<ColchonStack *> listaAuxiliar;
+        //Lista auxiliar que será usada para guardar los elementos que no correspondan al tipo correcto de datos,
+        //una vez el método finaliza, dicha lista auxiliar tendrá que volver a meter los elementos que sacó a la
+        //copia directa de tarimas
+        Stack<ColchonStack *> copiaDirectaTarimas = tarimaGroup.getTarimas();
+        //Con esto se saca un puntero directo a tarimas, si dicha copia es modificada, tarimas también lo hace
+        for(int h = 0; h < copiaDirectaTarimas.largoPila(); h++) { //2
+            //Se empieza a recorrer la pila tarimas
+            Stack<Colchon *> tarimaUnica = copiaDirectaTarimas.pop();
+            //Tarima con colchones del mismo tipo
+            if(tarimaUnica.largoPila() > pCantidadColchon) {
+                for(int k = 0; k < pCantidadColchon; k++) { //3
+                    Colchon colchonGuardado = tarimaUnica.pop();
+                    std::string nombreColchon = colchonGuardado.getName();
+                    if(nombreColchon != pNombre) {
+                        tarimaUnica.push(colchonGuardado);
+                        listaAuxiliar.push_back(tarimaUnica);
+                        Stack<Colchon *> tarimaUnica = copiaDirectaTarimas.pop();
+                    } else {
+                        camion.push_back(colchonGuardado);
+                    }
+                }
+                int pushes = listaAuxiliar.size();
+                for(int g = 0; g < pushes; g++) {
+                    copiaDirectaTarimas.push(tarimaUnica)
+                    Stack<Colchon *> tarimaUnica = listaAuxiliar.pop_back();
+                }
+            }else {
+                listaAuxiliar.push_back(tarimaUnica);
+            }
+        }
+        int cantidadElementos = listaAuxiliar.size();
+        for(int p = 0; p < cantidadElementos; p++) {
+            copiaDirectaTarimas.push(tarimaUnica);
+            Stack<Colchon *> tarimaUnica = listaAuxiliar.pop_back();
+        }
+    }
 };

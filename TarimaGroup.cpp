@@ -17,6 +17,8 @@ private:
     Stack<ColchonStack *> tarimas; // Almacena Stacks que guardan Colchones
     Configloader configuracion;
 
+//tarimas es una pila que guarda pilas de colchones
+
 public:
     TarimaGroup()
     {
@@ -39,7 +41,7 @@ public:
         vector<int> largo = infoColchones.largoColchon;
         for(int j = 0; j < 4; j++) {
             for(int i = 0; i < sizes[j]; i++){
-                tarimas.push(llenarInventario(name[j], peso[j], alto[j], ancho[j], largo[j], maxColchonesPorTarima));
+                tarimas.push(llenarInventario(name[j], peso[j], alto[j], ancho[j], largo[j]));
             }
         }
     }
@@ -56,6 +58,12 @@ public:
         sizes.push_back(cantidadTarimasTwin);
         int cantidadTarimasKing = infoBodega.kingquantity;
         sizes.push_back(cantidadTarimasKing);
+
+//sizes = [30, 20, 10, 15]
+
+//name = [King, Queen, Full, Twin]
+
+//tarimas = [[{King}, {King}, {King}], [{Queen}, {Queen}, {Queen}]]
         vector<string> name = infoColchones.name;
         vector<int> peso = infoColchones.pesoColchon;
         vector<int> alto = infoColchones.altoColchon;
@@ -70,12 +78,12 @@ public:
 
 // tarimas = [[{objetoColchon<Tipo Específico(King, Queen, etc)>}, {objetoColchon<Tipo Específico(King, Queen, etc)>}], [{objetoColchon<Tipo Específico(King, Queen, etc)>}], [{objetoColchon<Tipo Específico(King, Queen, etc)>}]]
 // Al acceder a "tarimas", se accede inicialmente a un Stack que guarda objetos de tipo "Colchon", si se accede a dicho
-// objeto, se puede usar el nombre del objeto con la key name para obtener cual tipo de colchón es, si el colchón es el
-// correcto, se p
+// objeto, se puede usar el nombre del objeto como la key name para obtener cual tipo de colchón es, si el colchón es el
+// correcto, se puede verificar si la cantidad es la correcta
 
     Stack<Colchon *> llenarInventario(string pName, int pPeso, int pAlto, int pAncho, int pLargo)
     {
-        Stack<Colchon *> tarimas2;  //Esta definicion es incorrecta, ya que el Stack<Colchon *> es la manera de definir
+        Stack<Colchon *> tarimas2; //Esta definicion es incorrecta, ya que el Stack<Colchon *> es la manera de definir
                                    //un vector, para crear un Stack que guarde objetos tipo Colchon nada más se define
                                    //un Stack y se hace push a objetos tipo Colchon, ya que el Stack recibe tipo void
                                    //por lo que se puede insertar cualquier tipo de dato
@@ -90,6 +98,7 @@ public:
         return tarimas2;
     }
 
+//Este método está bien, se aplicaría sacarColchones a tarimas y lo que se saque se deja en una pila de camión
     metodos<Colchon *> sacarColchones(int pCantidad){
         metodos<Colchon *> colchonesSacados;  // Crear una lista para almacenar los colchones sacados
     
