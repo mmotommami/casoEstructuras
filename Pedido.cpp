@@ -60,6 +60,26 @@ public:
     {
         return cantidadColchonesTwin;
     }
+
+    void setCantidadColchonesFull(int cantidad)
+    {
+        cantidadColchonesFull = cantidad;
+    }
+
+    void setCantidadColchonesKing(int cantidad)
+    {
+        cantidadColchonesKing = cantidad;
+    }
+
+    void setCantidadColchonesQueen(int cantidad)
+    {
+        cantidadColchonesQueen = cantidad;
+    }
+
+    void setCantidadColchonesTwin(int cantidad)
+    {
+        cantidadColchonesTwin = cantidad;
+    }
 /*
     void addColchon(Colchon *pColchon)
     {
@@ -73,4 +93,4 @@ public:
         return colchones->size();
     }
 */
-}
+};

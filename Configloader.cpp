@@ -1,3 +1,6 @@
+#ifndef _CONFIG_LOADER_H_
+#define _CONFIG_LOADER_H_
+
 #include <iostream>
 #include <fstream>
 #include "json.hpp"
@@ -234,31 +237,9 @@ public:
         config.pedidos.minColchonesPorPedido = pedidosData["minColchonesPorPedido"];
         config.pedidos.maxColchonesPorPedido = pedidosData["maxColchonesPorPedido"];
         config.pedidos.tiempoEntreEnvioDePedidos = pedidosData["tiempoEntreEnvioDePedidos"];
-/*
-        // Cargar datos de colchones
-        const auto& colchonesData = json_data["colchones"];
-        config.colchones.name = colchonesData["name"];
-        config.colchones.peso = colchonesData["peso"];
-        config.colchones.ancho = colchonesData["ancho"];
-        config.colchones.largo = colchonesData["largo"];
-        config.colchones.alto = colchonesData["alto"];
 
-        // Cargar datos de rutas
-        const auto& rutaData = json_data["rutas"];
-        config.rutas.name = rutaData["name"];
-        config.rutas.velocidad = rutaData["velocidad"];
-        config.rutas.distancia = rutaData["distancia"];
-        config.rutas.tiempo = rutaData["tiempo"];
-
-        // Cargar datos de rutas
-        const auto& rutasData = json_data["rutas"];
-        for (const auto& rutaData : rutasData) {
-            config.rutas.name.push_back(rutaData["name"].get<std::string>());
-            config.rutas.velocidad.push_back(rutaData["velocidad"].get<std::string>());
-            config.rutas.distancia.push_back(rutaData["distancia"].get<std::string>());
-            config.rutas.tiempo.push_back(rutaData["tiempo"].get<int>());
-        }
-*/
         return config;
     }
 };
+
+#endif

@@ -17,12 +17,10 @@ using namespace std;
 class Bodega
 {
 private:
-    ConfigBodega configBodega;
-    ConfigPedidos configPedidos;
-    metodos<TarimaGroup> inventario; // crearia un objeto mejor //En segunda instancia me parece inútil
+//    metodos<TarimaGroup> inventario; // crearia un objeto mejor //En segunda instancia me parece inútil
     TarimaGroup tarimaGroup;
     Configuracion config;
-    Queue<Pedido *> *pedidos;
+    Queue *pedidos;  // Queue<Pedido *> *pedidos
     vector<Pedido> listaDePedidos;
 
 public:
@@ -43,15 +41,15 @@ public:
     // seguro esto va a ser un thread
     void refillInventory()
     {
-        while(true){
+//        while(true){
             //Manera de llenar inventario
             
-            this_thread::sleep_for(config.bodega.refillTime);
-            tarimaGroup.rellenar();
+//            this_thread::sleep_for(config.bodega.refillTime);
+        tarimaGroup.rellenar();
             //En el main de simulador deberá haber algún tipo de creación de
             //thread que llame este método, para hacerlo nada más se debe
             //debe escribir thread <nombre del thread>(<nombre de este método>);
-        }
+  //      }
         // ir a revisar la lista de TarimaGroups para rellenar las pilas con colchones nuevos
     }
 
@@ -86,10 +84,10 @@ public:
             int randomCantidadColchonesTwin = minColchones + rand() % (maxColchones + 1 - minColchones);
             int randomCantidadColchonesKing = minColchones + rand() % (maxColchones + 1 - minColchones);
 
-            nuevoPedido.cantidadColchonesFull = randomCantidadColchonesFull;
-            nuevoPedido.cantidadColchonesKing = randomCantidadColchonesKing;
-            nuevoPedido.cantidadColchonesQueen = randomCantidadColchonesQueen;
-            nuevoPedido.cantidadColchonesTwin = randomCantidadColchonesTwin;
+            nuevoPedido.setCantidadColchonesFull(randomCantidadColchonesFull);
+            nuevoPedido.setCantidadColchonesKing(randomCantidadColchonesKing);
+            nuevoPedido.setCantidadColchonesQueen(randomCantidadColchonesQueen);
+            nuevoPedido.setCantidadColchonesTwin(randomCantidadColchonesTwin);
             
             listaDePedidos.push_back(nuevoPedido);
         }
@@ -131,7 +129,7 @@ public:
 //listaDePedidos = [{}, {}, {}, {}] //Cada una de las llaves significa un objeto de tipo Pedido,
 //para acceder a cada cantidad se hace con pedidoAnalizado.cantidadColchonesFull;
 
-            int cantidadFull = pedidoAnalizado..getCantidadColchonesFull();
+            int cantidadFull = pedidoAnalizado.getCantidadColchonesFull();
             int cantidadKing = pedidoAnalizado.getCantidadColchonesKing();
             int cantidadQueen = pedidoAnalizado.getCantidadColchonesQueen();
             int cantidadTwin = pedidoAnalizado.getCantidadColchonesTwin();
@@ -184,7 +182,8 @@ public:
         Stack copiaTarima = tarimaGroup.getTarimasCopy();  //Stack<ColchonStack *> copiaTarima
         for(int h = 0; h < copiaTarima.largoPila(); h++) {
             //Stack tarimaUnica = copiaTarima.pop();  //Stack<Colchon *> tarimaUnica
-            Stack tarimaUnica = static_cast<Stack>(copiaTarima.pop());
+            Stack* tarimaUnicaPtr = static_cast<Stack*>(copiaTarima.pop());
+            Stack tarimaUnica = *tarimaUnicaPtr;
             for(int k = 0; k < tarimaUnica.largoPila(); k++) {
                 Colchon* colchonPtr = static_cast<Colchon*>(tarimaUnica.pop());
                 Colchon colchonGuardado = *colchonPtr;
@@ -211,7 +210,7 @@ public:
         //Lista auxiliar que será usada para guardar los elementos que no correspondan al tipo correcto de datos,
         //una vez el método finaliza, dicha lista auxiliar tendrá que volver a meter los elementos que sacó a la
         //copia directa de tarimas
-        Stack* copiaTarimas = tarimaGroup.getTarimasCopy;  //Stack<ColchonStack *> copiaDirectaTarimas
+        Stack copiaTarimas = tarimaGroup.getTarimasCopy();  //Stack<ColchonStack *> copiaDirectaTarimas
         //Con esto se saca un puntero directo a tarimas, si dicha copia es modificada, tarimas también lo hace
         for(int h = 0; h < copiaTarimas.largoPila(); h++) { //2
             //Se empieza a recorrer la pila tarimas
@@ -222,16 +221,18 @@ public:
 
             if(tarimaUnica.largoPila() > pCantidadColchon) {
                 for(int k = 0; k < pCantidadColchon; k++) { //3
-                    Colchon* colchonGuardadoPtr = tarimaUnica.pop();
-                    Colchon colchonGuardado = *colchonGuardadoPtr;
-                    std::string nombreColchon = colchonGuardado.getName();
+//                    Colchon* colchonGuardadoPtr = tarimaUnica.pop();
+                    Colchon* colchonGuardadoPtr1 = static_cast<Colchon*>(tarimaUnica.pop());
+                    Colchon colchonGuardadoSinPtr = *colchonGuardadoPtr1;
+                    std::string nombreColchon = colchonGuardadoSinPtr.getName();
                     if(nombreColchon != pNombre) {
+                        void* colchonGuardado = static_cast<void*>(&colchonGuardadoSinPtr);
                         tarimaUnica.push(colchonGuardado);
                         listaAuxiliar.push_back(tarimaUnica);
                         Stack* tarimaUnicaPtr = tarimaGroup.sacarTarima();
                         Stack tarimaUnica = *tarimaUnicaPtr;
                     } else {
-                        camion.push_back(colchonGuardado);
+                        camion.push_back(colchonGuardadoSinPtr);
                     }
                 }
                 int pushes = listaAuxiliar.size();
@@ -256,4 +257,6 @@ public:
 
         return camion;
     }
-}
+};
+
+#endif

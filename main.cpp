@@ -6,7 +6,7 @@
 int main()
 {
     // Crear una instancia de Simulador
-//    Simulador simulador;
+    Simulador simulador;
 
     Configuracion config = ConfigLoader::LoadConfig();
 

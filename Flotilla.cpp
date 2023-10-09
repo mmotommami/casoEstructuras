@@ -16,3 +16,5 @@ public:
         // ver los camiones disponibles para enviar los colchones
     }
 };
+
+#endif

@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/PRINCIPAL/Desktop/Caso2Estructuras/tester/casoEstructuras",
-      "program": "c:/Users/PRINCIPAL/Desktop/Caso2Estructuras/tester/casoEstructuras/build/Debug/outDebug",
+      "cwd": "c:/Users/PRINCIPAL/Downloads/estructuras-main/estructuras-main",
+      "program": "c:/Users/PRINCIPAL/Downloads/estructuras-main/estructuras-main/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

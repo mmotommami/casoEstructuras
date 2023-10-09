@@ -76,7 +76,9 @@ public:
         vector<int> largo = {config.king.largo, config.queen.largo, config.twin.largo, config.full.largo};
         for(int p = 0; p < 4; p++) {
             for(int i = 0; i < sizes[p]; i++){
-                tarimas.push(llenarInventario(name[p], peso[p], alto[p], ancho[p], largo[p]));
+                Stack datos = llenarInventario(name[p], peso[p], alto[p], ancho[p], largo[p]);
+                Stack* datosPtr = &datos;
+                tarimas.push(datosPtr);
             }
         } 
     }
@@ -97,7 +99,7 @@ public:
             {
                 Colchon* colchonPtr = new Colchon(pName, pPeso, pAlto, pAncho, pLargo);
                 Colchon colchon = *colchonPtr;
-                tarimas2.push(colchon);
+                tarimas2.push(colchonPtr);
             }
             // inicializar la lista de tarimas y puedo meter los colchones
         return tarimas2;
@@ -110,24 +112,24 @@ public:
     
         // Supongamos que deseas sacar colchones de la primera tarima
         if (!tarimas.estaVacio()) {
-            void* tarimaPtr = tarimas.pop();    //ColchonStack tarima = tarimas.pop();  // Obtener la primera tarima de la lista
+            void* tarimaPtr1 = tarimas.pop();    //ColchonStack tarima = tarimas.pop();  // Obtener la primera tarima de la lista
+            Stack* tarimaPtr = static_cast<Stack*>(tarimaPtr1);
             Stack tarima = *tarimaPtr;
     
             // Sacar pCantidad de colchones de la tarima
             for (int i = 0; i < pCantidad; i++) {
-                Colchon* colchonPtr = tarima.pop();  // Sacar un colchon de la tarima
-                Colchon cholchon = *colchonPtr;
-                if (colchon != nullptr) {
-                    colchonesSacados.addToEnd(colchon);  // Agregar el colchon a la lista de colchones sacados
-                } else {
-                    // Si no hay más colchones en la tarima, salir del bucle
+                Colchon* colchonPtr = static_cast<Colchon*>(tarima.pop());  // Sacar un colchon de la tarima
+                Colchon colchon = *colchonPtr;
+                colchonesSacados.addToEnd(colchonPtr);  // Agregar el colchon a la lista de colchones sacados
+                if (tarimaPtr == nullptr) {
                     break;
                 }
             }
     
             // Si quedan colchones en la tarima, devolverla a la lista de tarimas
             if (!tarima.estaVacio()) {
-                tarimas.push(tarima);
+                void* tarimaV = static_cast<void*>(&tarima);
+                tarimas.push(tarimaV);
             }
         }
     
@@ -151,7 +153,8 @@ public:
 
     void agregarTarima(Stack tarima)
     {
-        tarimas.push(tarima);
+        void* tarimaV = static_cast<void*>(&tarima);
+        tarimas.push(tarimaV);
     }
 
     // Método para sacar una tarima de la pila "tarimas"
@@ -162,3 +165,5 @@ public:
     }
 
 };
+
+#endif

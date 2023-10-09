@@ -48,3 +48,5 @@ public:
         //Thread para atender pedidos
     }
 };
+
+#endif
