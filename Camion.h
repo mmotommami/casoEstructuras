@@ -12,7 +12,7 @@ private:
     int capacidad;
     int ancho;
     int largo;
-    Stack<Colchon *> cajon;
+    Stack cajon;  //Stack<Colchon *> cajon;
     int id;
     bool available;
 

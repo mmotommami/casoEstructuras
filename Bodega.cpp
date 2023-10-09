@@ -1,3 +1,6 @@
+#ifndef _BODEGA_
+#define _BODEGA_ 0
+
 #include "ConfigLoader.cpp"
 #include "TarimaGroup.cpp"
 #include "Pedido.cpp"
@@ -14,18 +17,18 @@ using namespace std;
 class Bodega
 {
 private:
-    Configbodega configBodega;
+    ConfigBodega configBodega;
     ConfigPedidos configPedidos;
-    metodos<TarimaGroup> inventario; // crearia un objeto mejor
+    metodos<TarimaGroup> inventario; // crearia un objeto mejor //En segunda instancia me parece inútil
     TarimaGroup tarimaGroup;
-    Configloader configuracion;
+    Configuracion config;
     Queue<Pedido *> *pedidos;
-    Pedido nuevoPedido;
     vector<Pedido> listaDePedidos;
 
 public:
-    Bodega(Configbodega pConfiguracionBodega, ConfigPedidos pConfigPedidos, Flotilla *flotillaManager)
+    Bodega()
     {
+        config = ConfigLoader::LoadConfig();
         initBodega();
         // start al hilo de refill
         // start al hilo de generar pedidos
@@ -42,7 +45,8 @@ public:
     {
         while(true){
             //Manera de llenar inventario
-            this_thread::sleep_for(configBodega.refilltime);
+            
+            this_thread::sleep_for(config.bodega.refillTime);
             tarimaGroup.rellenar();
             //En el main de simulador deberá haber algún tipo de creación de
             //thread que llame este método, para hacerlo nada más se debe
@@ -55,17 +59,17 @@ public:
     // o podria ser que haya solo un hilo y ese hilo controle a refill y al generar
     void generarPedidos()
     {
-        ConfigPedidos infoPedidos = configuracion.getConfigPedidos();
+        Pedido nuevoPedido;
 
-        int minPedidos = infoPedidos.minPedidos;
-        int maxPedidos = infoPedidos.maxPedidos;
+        int minPedidos = config.pedidos.minPedidos;
+        int maxPedidos = config.pedidos.maxPedidos;
 /*
         int tiempoGeneracion = infoPedidos.tiempoEntreGeneracion; 
         Este tiempo de generacion no va aquí, este debe ser sacado en el simulador,
         para que el thread llame este método cada cantidad de segundos que esta variable diga
 */
-        int minColchones = infoPedidos.minColchonesPorPedido;
-        int maxColchones = infoPedidos.maxColchonesPorPedido;
+        int minColchones = config.pedidos.minColchonesPorPedido;
+        int maxColchones = config.pedidos.maxColchonesPorPedido;
 /*
         int tiempoEntreEnvioDePedidos = infoPedidos.tiempoEntrePedidos;
         Al igual que el tiempo de generacion, este dato no debe ser sacado aquí, este dato debe
@@ -77,17 +81,17 @@ public:
         int randomCantidadPedidos = minPedidos + rand() % (maxPedidos + 1 - minPedidos);
 
         for(int i = 0; i < randomCantidadPedidos; i++) {
-            int randomCantidadColchonesFull = minColchones + rand() % (maxColchones + 1 minColchones);
-            int randomCantidadColchonesQueen = minColchones + rand() % (maxColchones + 1 minColchones);
-            int randomCantidadColchonesTwin = minColchones + rand() % (maxColchones + 1 minColchones);
-            int randomCantidadColchonesKing = minColchones + rand() % (maxColchones + 1 minColchones);
+            int randomCantidadColchonesFull = minColchones + rand() % (maxColchones + 1 - minColchones);
+            int randomCantidadColchonesQueen = minColchones + rand() % (maxColchones + 1 - minColchones);
+            int randomCantidadColchonesTwin = minColchones + rand() % (maxColchones + 1 - minColchones);
+            int randomCantidadColchonesKing = minColchones + rand() % (maxColchones + 1 - minColchones);
 
             nuevoPedido.cantidadColchonesFull = randomCantidadColchonesFull;
             nuevoPedido.cantidadColchonesKing = randomCantidadColchonesKing;
             nuevoPedido.cantidadColchonesQueen = randomCantidadColchonesQueen;
             nuevoPedido.cantidadColchonesTwin = randomCantidadColchonesTwin;
             
-            this->listaDePedidos.push_back(nuevoPedido);
+            listaDePedidos.push_back(nuevoPedido);
         }
 
 
@@ -109,31 +113,37 @@ public:
     // thread o bien todo dentro de un thread en bodega
     // Este método atiende un pedido cada cierta cantidad de tiempo, por lo que se debe tener un thread
     // que llame a este método dependiendo de cada cuanto se quiera atender un pedido.
-    void atenderPedidos()
+
+    //Hilo que se ejecute cada cierto tiempo
+    void atenderPedido()
     {
         bool estado = false;
 
         std::vector<Pedido> listaAuxiliar;
 
-        //Este while puede generar problemas, debido a que puede querer
-        //realizar un pop_back a una lista que no posee elementos
-        while(estado == false){
+//listaDePedidos.empty(); retorna true cuando no tiene elementos, por lo que 
+//!listaDePedidos.empty() retorna true siempre que hayan elementos
+        while(!listaDePedidos.empty()){
 
-            Pedido pedidoAnalizado = this->listaDePedidos.pop_back(nuevoPedido);
+            Pedido pedidoAnalizado = listaDePedidos.back();
+            listaDePedidos.pop_back();
 
-//listaDePedidos = [30, 20, 10, 15]
+//listaDePedidos = [{}, {}, {}, {}] //Cada una de las llaves significa un objeto de tipo Pedido,
+//para acceder a cada cantidad se hace con pedidoAnalizado.cantidadColchonesFull;
 
-            int cantidadFull = pedidoAnalizado.cantidadColchonesFull;
-            int cantidadKing = pedidoAnalizado.cantidadColchonesKing;
-            int cantidadQueen = pedidoAnalizado.cantidadColchonesQueen;
-            int cantidadTwin = pedidoAnalizado.cantidadColchonesTwin;
+            int cantidadFull = pedidoAnalizado..getCantidadColchonesFull();
+            int cantidadKing = pedidoAnalizado.getCantidadColchonesKing();
+            int cantidadQueen = pedidoAnalizado.getCantidadColchonesQueen();
+            int cantidadTwin = pedidoAnalizado.getCantidadColchonesTwin();
             //Comprueba si se puede realizar el pedido, en caso de que sí se pueda se entra dentro del if,
             //y dentro de este se cambia el valor booleano de "estado" a true.
             if(comprobarCantidad("Full", cantidadFull) && comprobarCantidad("King", cantidadKing) && comprobarCantidad("Queen", cantidadQueen) && comprobarCantidad("Twin", cantidadTwin)){
-
+                //vector<Colchon> cargaDeFull = cargarCamion("Full", cantidadFull);
+                std::cout << "Hola, mundo!" << std::endl;
                 //Si un pedido es realizado, se revisa si listaAuxiliar.size() == 0, si es el caso todo bien, pero
                 //si no lo es debemos de sacar el tamaño con el .size y generar un for que saque tantos elementos
                 //como el tamaño de la listaAuxiliar diga y lo meta al vector de pedidos.
+                //Una vez que el pedido es realizado, se utiliza break; para salir del while
             } else {
                 listaAuxiliar.push_back(pedidoAnalizado);
             }
@@ -163,18 +173,21 @@ public:
 
         int cantidadElementosA = listaAuxiliar.size();
         for(int k = 0; k < cantidadElementosA; k++) {
-            Pedido pedidoSacado = listaAuxiliar.pop_back();
+            Pedido pedidoSacado = listaAuxiliar.back();
+            listaAuxiliar.pop_back();
             this->listaDePedidos.push_back(pedidoSacado);
         }
 
     }
 
     bool comprobarCantidad(std::string pNombre, int pCantidadColchon) {
-        Stack<ColchonStack *> copiaTarima = tarimaGroup.getTarimasCopy();
+        Stack copiaTarima = tarimaGroup.getTarimasCopy();  //Stack<ColchonStack *> copiaTarima
         for(int h = 0; h < copiaTarima.largoPila(); h++) {
-            Stack<Colchon *> tarimaUnica = copiaTarima.pop();
+            //Stack tarimaUnica = copiaTarima.pop();  //Stack<Colchon *> tarimaUnica
+            Stack tarimaUnica = static_cast<Stack>(copiaTarima.pop());
             for(int k = 0; k < tarimaUnica.largoPila(); k++) {
-                Colchon colchonGuardado = tarimaUnica.pop();
+                Colchon* colchonPtr = static_cast<Colchon*>(tarimaUnica.pop());
+                Colchon colchonGuardado = *colchonPtr;
                 std::string colchonInicial = colchonGuardado.getName();
                 if(colchonInicial != pNombre) {
                     //Este espacio vacío es porque no quiero que ocurra 
@@ -182,8 +195,6 @@ public:
                 } else {
                     if(tarimaUnica.largoPila() > pCantidadColchon) {
                         return true;
-                        //En este punto, el método podría empezar a sacar
-                        //elementos de dicha tarima y meterlo en el camion
                     }
                 }
             }
@@ -191,44 +202,58 @@ public:
         return false;
     }
 //          tarimas = [[{King}, {King}, {King}], [{Queen}, {Queen}, {Queen}]]
-    void cargarCamion(std::string pNombre, int pCantidadColchon) {
+
+    vector<Colchon> cargarCamion(std::string pNombre, int pCantidadColchon) {
         //vector temporal mientras se define una pila para camion
         std::vector<Colchon> camion;
-        std::vector<ColchonStack *> listaAuxiliar;
+        std::vector<Stack> listaAuxiliar;  //vector<ColchonStack *> listaAuxiliar;
+        Stack tarimaUnica;
         //Lista auxiliar que será usada para guardar los elementos que no correspondan al tipo correcto de datos,
         //una vez el método finaliza, dicha lista auxiliar tendrá que volver a meter los elementos que sacó a la
         //copia directa de tarimas
-        Stack<ColchonStack *> copiaDirectaTarimas = tarimaGroup.getTarimas();
+        Stack* copiaTarimas = tarimaGroup.getTarimasCopy;  //Stack<ColchonStack *> copiaDirectaTarimas
         //Con esto se saca un puntero directo a tarimas, si dicha copia es modificada, tarimas también lo hace
-        for(int h = 0; h < copiaDirectaTarimas.largoPila(); h++) { //2
+        for(int h = 0; h < copiaTarimas.largoPila(); h++) { //2
             //Se empieza a recorrer la pila tarimas
-            Stack<Colchon *> tarimaUnica = copiaDirectaTarimas.pop();
+            Stack* tarimaUnicaPtr = tarimaGroup.sacarTarima();
+            Stack tarimaUnica = *tarimaUnicaPtr;
+//            Stack* tarimaUnica = copiaDirectaTarimas.pop();  //Stack<Colchon *> tarimaUnica
             //Tarima con colchones del mismo tipo
+
             if(tarimaUnica.largoPila() > pCantidadColchon) {
                 for(int k = 0; k < pCantidadColchon; k++) { //3
-                    Colchon colchonGuardado = tarimaUnica.pop();
+                    Colchon* colchonGuardadoPtr = tarimaUnica.pop();
+                    Colchon colchonGuardado = *colchonGuardadoPtr;
                     std::string nombreColchon = colchonGuardado.getName();
                     if(nombreColchon != pNombre) {
                         tarimaUnica.push(colchonGuardado);
                         listaAuxiliar.push_back(tarimaUnica);
-                        Stack<Colchon *> tarimaUnica = copiaDirectaTarimas.pop();
+                        Stack* tarimaUnicaPtr = tarimaGroup.sacarTarima();
+                        Stack tarimaUnica = *tarimaUnicaPtr;
                     } else {
                         camion.push_back(colchonGuardado);
                     }
                 }
                 int pushes = listaAuxiliar.size();
-                for(int g = 0; g < pushes; g++) {
-                    copiaDirectaTarimas.push(tarimaUnica)
-                    Stack<Colchon *> tarimaUnica = listaAuxiliar.pop_back();
+                while(pushes != 0) {
+                    tarimaGroup.agregarTarima(tarimaUnica);
+//                    copiaDirectaTarimas.push(tarimaUnica)
+                    Stack tarimaUnica = listaAuxiliar.back();  //Stack<Colchon *> tarimaUnica
+                    listaAuxiliar.pop_back();
+                    pushes--;
                 }
             }else {
                 listaAuxiliar.push_back(tarimaUnica);
             }
         }
         int cantidadElementos = listaAuxiliar.size();
-        for(int p = 0; p < cantidadElementos; p++) {
-            copiaDirectaTarimas.push(tarimaUnica);
-            Stack<Colchon *> tarimaUnica = listaAuxiliar.pop_back();
+        while(cantidadElementos != 0) {
+            tarimaGroup.agregarTarima(tarimaUnica);
+            Stack tarimaUnica = listaAuxiliar.back();  //Stack<Colchon *> tarimaUnica
+            listaAuxiliar.pop_back();
+            cantidadElementos--;
         }
+
+        return camion;
     }
-};
+}

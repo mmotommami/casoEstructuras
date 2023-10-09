@@ -75,7 +75,7 @@ struct metodos
     void *removeFirst()
     {
 
-        colchon *result = nullptr;
+        void *result = nullptr;
         struct nodo *cursor = start;
 
         if (size > 1)

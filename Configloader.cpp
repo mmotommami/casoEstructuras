@@ -2,8 +2,85 @@
 #include <fstream>
 #include "json.hpp"
 #include <vector>
+#include <string>
 
 using namespace std;
+
+struct ConfigColchones
+{
+    vector<string> name;
+    vector<int> peso;
+    vector<int> ancho;
+    vector<int> largo;
+    vector<int> alto;
+};
+
+struct ConfigFull
+{
+    string name;
+    int peso;
+    int ancho;
+    int largo;
+    int alto;
+};
+
+struct ConfigRuta1
+{
+    string name;
+    string velocidad;
+    int distancia;
+    int tiempo;
+};
+
+struct ConfigRuta2
+{
+    string name;
+    string velocidad;
+    int distancia;
+    int tiempo;
+};
+
+struct ConfigRuta3
+{
+    string name;
+    string velocidad;
+    int distancia;
+    int tiempo;
+};
+struct ConfigRuta4
+{
+    string name;
+    string velocidad;
+    int distancia;
+    int tiempo;
+};
+
+struct ConfigTwin
+{
+    string name;
+    int peso;
+    int ancho;
+    int largo;
+    int alto;
+};
+
+struct ConfigQueen
+{
+    string name;
+    int peso;
+    int ancho;
+    int largo;
+    int alto;
+};
+
+struct ConfigKing
+{
+    string name;
+    int peso;
+    int ancho;
+    int largo;
+    int alto;
+};
 
 struct ConfigRutas
 {
@@ -13,23 +90,23 @@ struct ConfigRutas
     vector<int> tiempo;
 };
 
-struct ConfigColchones
+struct ConfigCamion
 {
-    vector<string> name;
-    vector<int> pesoColchon;
-    vector<int> anchoColchon;
-    vector<int> largoColchon;
-    vector<int> altoColchon;
+    int cantidadCamiones;
+    int capacidad;
+    int longitud;
+    int altura;
+    float ancho;
 };
 
 struct ConfigBodega
 {
-    int twinquantity; //Cantidad de tarimas para este tipo de colchon
-    int fullquantity;
-    int queenquantity;
-    int kingquantity;
-    int tarimasize; //Cantidad de colchones por tarima
-    int refilltime;
+    int Twin;
+    int Full;
+    int Queen;
+    int King;
+    int tarimaSize;
+    int refillTime;
 };
 
 struct ConfigPedidos
@@ -39,230 +116,149 @@ struct ConfigPedidos
     int tiempoEntreGeneracion;
     int minColchonesPorPedido;
     int maxColchonesPorPedido;
-    int tiempoEntrePedidos;
+    int tiempoEntreEnvioDePedidos;
 };
 
-struct ConfigCamiones
-{
-    int cantidadCamiones;
-    int capacidad;
-    int largo;
-    int ancho;
-    int alto;
+struct Configuracion {
+    int hora;
+    ConfigCamion camion;
+    ConfigBodega bodega;
+    ConfigPedidos pedidos;
+    ConfigColchones colchones;
+    ConfigRutas rutas;
+    ConfigFull full;
+    ConfigTwin twin;
+    ConfigQueen queen;
+    ConfigKing king;
+    ConfigRuta1 ruta1;
+    ConfigRuta2 ruta2;
+    ConfigRuta3 ruta3;
+    ConfigRuta4 ruta4;
 };
 
-class Configloader
-{
-private:
-    ConfigBodega configbodega;
-    ConfigPedidos configpedidos;
-    ConfigCamiones configcamiones;
-    ConfigColchones configcolchones;
-    ConfigRutas configrutas;
-
+class ConfigLoader {
 public:
-    Configloader()
-    {
-        loadAllJson();
-    }
+    static Configuracion LoadConfig() {
+        Configuracion config;
 
-    void loadAllJson()
-    {
-        // Open the JSON file for reading
-        std::ifstream file("configuracion.json");
-    
+        ifstream file("configuracion.json");
         if (!file.is_open()) {
-            std::cerr << "Failed to open the JSON file." << std::endl;
-            return 1;
+            cerr << "Error al abrir el archivo JSON." << endl;
+            exit(1);
         }
 
-        // Parse the JSON data
         nlohmann::json json_data;
         file >> json_data;
-
-        // Close the file
         file.close();
 
-        // Access and use the JSON data
-        std::string name = json_data["name"];
-        nlohmann::json pedidos = json_data["pedidos"];
+//        cout << "JSON data:\n" << json_data.dump(4) << endl;
 
-        int minPedidosJ = pedidos["minPedidos"];
-        int maxPedidosJ = pedidos["maxPedidos"];
 
-        //Tiempo de cada cuanto se generan los pedidos
-        int tiempoEntreGeneracionJ = pedidos["tiempoEntreGeneracion"];
-        int minColchonesPorPedidoJ = pedidos["minColchonesPorPedido"];
-        int maxColchonesPorPedidoJ = pedidos["maxColchonesPorPedido"];
+        config.hora = json_data["hora"];
+        config.camion.cantidadCamiones = json_data["cantidadCamiones"];
 
-        //Tiempo de cada cuanto se envía el/los camión/camiones de un pedido
-        int tiempoEntreEnvioDePedidosJ = pedidos["tiempoEntreEnvioDePedidos"];
+        // Cargar datos de camion
+        const auto& camionData = json_data["camion"];
+//        config.camion.cantidadCamiones = camionData["cantidadCamiones"];
+        config.camion.capacidad = camionData["capacidad"];
+        config.camion.longitud = camionData["longitud"];
+        config.camion.altura = camionData["altura"];
+        config.camion.ancho = camionData["ancho"];
 
-        configpedidos.minPedidos = minPedidosJ;
-        configpedidos.maxPedidos = maxPedidosJ;
-        configpedidos.tiempoEntreGeneracion = tiempoEntreGeneracionJ;
-        configpedidos.minColchonesPorPedido = minColchonesPorPedidoJ;
-        configpedidos.maxColchonesPorPedido = maxColchonesPorPedidoJ;
-        configpedidos.tiempoEntrePedidos = tiempoEntreEnvioDePedidosJ;
+        const auto& fullData = json_data["Full"];
+        config.full.name = fullData["name"];
+        config.full.alto = fullData["alto"];
+        config.full.ancho = fullData["ancho"];
+        config.full.largo = fullData["largo"];
+        config.full.peso = fullData["peso"];
 
-        //Cantidad de pilas de cada producto
-        int twinQuantityJ = bodega["Twin"];
-        int queenQuantityJ = bodega["Queen"];
-        int kingQuantityJ = bodega["King"];
-        int fullQuantityJ = bodega["Full"];
+        const auto& twinData = json_data["Twin"];
+        config.twin.name = twinData["name"];
+        config.twin.alto = twinData["alto"];
+        config.twin.ancho = twinData["ancho"];
+        config.twin.largo = twinData["largo"];
+        config.twin.peso = twinData["peso"];
 
-        //Cantidad de productos por fila/tarima
-        int tarimaSizeJ = bodega["tarimaSize"];
+        const auto& queenData = json_data["Queen"];
+        config.queen.name = queenData["name"];
+        config.queen.alto = queenData["alto"];
+        config.queen.ancho = queenData["ancho"];
+        config.queen.largo = queenData["largo"];
+        config.queen.peso = queenData["peso"];
 
-        //Tiempo de relleno de pilas/tarimas
-        int refillTimeJ = bodega["refillTime"];
+        const auto& kingData = json_data["King"];
+        config.king.name = kingData["name"];
+        config.king.alto = kingData["alto"];
+        config.king.ancho = kingData["ancho"];
+        config.king.largo = kingData["largo"];
+        config.king.peso = kingData["peso"];
 
-        configbodega.twinquantity = twinQuantityJ;
-        configbodega.queenquantity = queenQuantityJ;
-        configbodega.kingquantity = kingQuantityJ;
-        configbodega.fullquantity = fullQuantityJ;
-        configbodega.tarimasize = tarimaSizeJ;
-        configbodega.refilltime = refillTimeJ;
+        const auto& ruta1Data = json_data["ruta1"];
+        config.ruta1.name = ruta1Data["name"];
+        config.ruta1.velocidad = ruta1Data["velocidad"];
+        config.ruta1.distancia = ruta1Data["distancia"];
+        config.ruta1.tiempo = ruta1Data["tiempo"];
 
-        //Datos de los camiones
-        int camiones = json_data["cantidadCamiones"];
-        nlohmann::json camion = json_data["camion"];
+        const auto& ruta2Data = json_data["ruta2"];
+        config.ruta2.name = ruta2Data["name"];
+        config.ruta2.velocidad = ruta2Data["velocidad"];
+        config.ruta2.distancia = ruta2Data["distancia"];
+        config.ruta2.tiempo = ruta2Data["tiempo"];
 
-        int capacidadCamionJ = camion["capacidad"];
-        int largoCamionJ = camion["longitud"];
-        int altoCamionJ = camion["alto"];
-        int anchoCamionJ = camion["ancho"];
+        const auto& ruta3Data = json_data["ruta3"];
+        config.ruta3.name = ruta3Data["name"];
+        config.ruta3.velocidad = ruta3Data["velocidad"];
+        config.ruta3.distancia = ruta3Data["distancia"];
+        config.ruta3.tiempo = ruta3Data["tiempo"];
 
-        configcamiones.cantidadCamiones = camiones;
-        configcamiones.capacidad = capacidadCamionJ;
-        configcamiones.largo = largoCamionJ;
-        configcamiones.alto = altoCamionJ;
-        configcamiones.ancho = anchoCamionJ;
+        const auto& ruta4Data = json_data["ruta4"];
+        config.ruta4.name = ruta4Data["name"];
+        config.ruta4.velocidad = ruta4Data["velocidad"];
+        config.ruta4.distancia = ruta4Data["distancia"];
+        config.ruta4.tiempo = ruta4Data["tiempo"];
 
-        nlohmann::json colchon = json_data["colchones"];
+        // Cargar datos de bodega
+        const auto& bodegaData = json_data["bodega"];
+        config.bodega.Twin = bodegaData["Twin"];
+        config.bodega.Full = bodegaData["Full"];
+        config.bodega.Queen = bodegaData["Queen"];
+        config.bodega.King = bodegaData["King"];
+        config.bodega.tarimaSize = bodegaData["tarimaSize"];
+        config.bodega.refillTime = bodegaData["refillTime"];
 
-        for(auto colchones : colchon) 
-        {
-            configcolchones.name.push_back(colchon["name"]);
-            configcolchones.pesoColchon.push_back(colchon["peso"]);
-            configcolchones.anchoColchon.push_back(colchon["ancho"]);
-            configcolchones.largoColchon.push_back(colchon["largo"]);
-            configcolchones.altoColchon.push_back(colchon["alto"]);
-        }
-
-        nlohmann::json ruta = json_data["rutas"];
-
-        for(auto rutas : ruta) 
-        {
-            configrutas.name.push_back(ruta["name"]);
-            configrutas.velocidad.push_back(ruta["velocidad"]);
-            configrutas.distancia.push_back(ruta["distancia"]);
-            configrutas.tiempo.push_back(ruta["tiempo"]);
-        }
+        // Cargar datos de pedidos
+        const auto& pedidosData = json_data["pedidos"];
+        config.pedidos.minPedidos = pedidosData["minPedidos"];
+        config.pedidos.maxPedidos = pedidosData["maxPedidos"];
+        config.pedidos.tiempoEntreGeneracion = pedidosData["tiempoEntreGeneracion"];
+        config.pedidos.minColchonesPorPedido = pedidosData["minColchonesPorPedido"];
+        config.pedidos.maxColchonesPorPedido = pedidosData["maxColchonesPorPedido"];
+        config.pedidos.tiempoEntreEnvioDePedidos = pedidosData["tiempoEntreEnvioDePedidos"];
 /*
-        // Print the parsed data
-        std::cout << "Name: " << name << std::endl;
-        std::cout << "Cantidad camiones: " << camiones << std::endl;
+        // Cargar datos de colchones
+        const auto& colchonesData = json_data["colchones"];
+        config.colchones.name = colchonesData["name"];
+        config.colchones.peso = colchonesData["peso"];
+        config.colchones.ancho = colchonesData["ancho"];
+        config.colchones.largo = colchonesData["largo"];
+        config.colchones.alto = colchonesData["alto"];
+
+        // Cargar datos de rutas
+        const auto& rutaData = json_data["rutas"];
+        config.rutas.name = rutaData["name"];
+        config.rutas.velocidad = rutaData["velocidad"];
+        config.rutas.distancia = rutaData["distancia"];
+        config.rutas.tiempo = rutaData["tiempo"];
+
+        // Cargar datos de rutas
+        const auto& rutasData = json_data["rutas"];
+        for (const auto& rutaData : rutasData) {
+            config.rutas.name.push_back(rutaData["name"].get<std::string>());
+            config.rutas.velocidad.push_back(rutaData["velocidad"].get<std::string>());
+            config.rutas.distancia.push_back(rutaData["distancia"].get<std::string>());
+            config.rutas.tiempo.push_back(rutaData["tiempo"].get<int>());
+        }
 */
-
-        return 0;
-    }
-
-    ConfigBodega getConfigBodega() const 
-    {
-        return configbodega;
-    }
-    
-    ConfigPedidos getConfigPedidos() const 
-    {
-        return configpedidos;
-    }
-
-    ConfigCamiones getConfigCamiones() const
-    {
-        return configcamiones;
-    }
-
-    ConfigRutas getConfigRutas() const
-    {
-        return configrutas;
-    }
-
-    ConfigColchones getConfigColchones() const
-    {
-        return configcolchones;
+        return config;
     }
 };
-
-
-/*
-    //La mejor manera de sacar los datos de estos getters es a traves de un arrayList o un vector,
-    //de manera que se agreguen todos los datos dentro del arrayList para luego meterlos
-    //donde se necesiten, de esta manera no habría que hacer un getter para cada cosa.
-
-
-    void getConfiguracionDeBodega(vector<int>& listaConfigBodega)
-    {
-        listaConfigBodega.push_back(configbodega.twinquantity);
-        listaConfigBodega.push_back(configbodega.fullquantity);
-        listaConfigBodega.push_back(configbodega.queenquantity);
-        listaConfigBodega.push_back(configbodega.kingquantity);
-        listaConfigBodega.push_back(configbodega.tarimasize);
-        listaConfigBodega.push_back(configbodega.refilltime);
-    }
-
-    void getConfiguracionPedidos(vector<int>& listaConfigPedidos)
-    {
-        listaConfigPedidos.push_back(configpedidos.minPedidos);
-        listaConfigPedidos.push_back(configpedidos.maxPedidos);
-        listaConfigPedidos.push_back(configpedidos.minColchonesPorPedido);
-        listaConfigPedidos.push_back(configpedidos.maxColchonesPorPedido);
-        listaConfigPedidos.push_back(configpedidos.tiempoEntreGeneracion);
-        listaConfigPedidos.push_back(configpedidos.tiempoEntrePedidos);
-    }
-
-    void getConfiguracionCamiones(vector<int>& listaConfigCamiones)
-    {
-        listaConfigCamiones.push_back(configcamiones.cantidadCamiones);
-        listaConfigCamiones.push_back(configcamiones.capacidad);
-        listaConfigCamiones.push_back(configcamiones.largo);
-        listaConfigCamiones.push_back(configcamiones.ancho);
-        listaConfigCamiones.push_back(configcamiones.alto);
-    }
-
-    void getConfiguracionRutas(vector<ConfigRutas>& vectorDeVectoresRuta)
-    {
-        vectorDeVectoresRuta.push_back(configrutas);
-    }
-    
-
- Manera de guardar en un vector distintos tipos de datos
-#include <iostream>
-#include <vector>
-#include <string>
-
-// Definición de una estructura que contiene diferentes tipos de datos
-struct Registro {
-    int entero;
-    double flotante;
-    std::string cadena;
-};
-
-int main() {
-    // Crear un vector de estructuras Registro
-    std::vector<Registro> vectorDeRegistros;
-
-    // Crear objetos de la estructura Registro y agregarlos al vector
-    Registro registro1 = {42, 3.14159, "Hola"};
-    Registro registro2 = {123, 2.71828, "Mundo"};
-
-    vectorDeRegistros.push_back(registro1);
-    vectorDeRegistros.push_back(registro2);
-
-    // Acceder a los elementos del vector y sus campos
-    std::cout << "Entero del primer registro: " << vectorDeRegistros[0].entero << std::endl;
-    std::cout << "Cadena del segundo registro: " << vectorDeRegistros[1].cadena << std::endl;
-
-    return 0;
-}
-*/

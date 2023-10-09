@@ -1,7 +1,10 @@
+#ifndef _TARIMAGROUP_
+#define _TARIMAGROUP_ 0
+
 #include <string>
 #include "Colchon.h"
 #include "Stack.h"
-#include "Configloader.cpp"
+#include "ConfigLoader.cpp"
 #include <vector>
 #include "lista.h"
 
@@ -12,16 +15,18 @@ class TarimaGroup
 private:
     int cantidadColchones;
     string tipoColchon;
-    typedef Stack<Colchon *> ColchonStack; // Alias para Stack<Colchon *>
+//    typedef Stack<Colchon *> ColchonStack; // Alias para Stack<Colchon *>
 
-    Stack<ColchonStack *> tarimas; // Almacena Stacks que guardan Colchones
-    Configloader configuracion;
+    Stack tarimas;         //Stack<ColchonStack *> tarimas; // Almacena Stacks que guardan Colchones
+    Configuracion config;
 
 //tarimas es una pila que guarda pilas de colchones
 
 public:
     TarimaGroup()
     {
+        config = ConfigLoader::LoadConfig();
+        /*
         ConfigBodega infoBodega = configuracion.getConfigBodega();
         ConfigColchones infoColchones = configuracion.getConfigColchones();
         vector<int> sizes;
@@ -44,19 +49,19 @@ public:
                 tarimas.push(llenarInventario(name[j], peso[j], alto[j], ancho[j], largo[j]));
             }
         }
+        */
+       rellenar();
     }
 
     void rellenar() {
-        ConfigBodega infoBodega = configuracion.getConfigBodega();
-        ConfigColchones infoColchones = configuracion.getConfigColchones();
         vector<int> sizes;
-        int cantidadTarimasFull = infoBodega.fullquantity;
+        int cantidadTarimasFull = config.bodega.Full;
         sizes.push_back(cantidadTarimasFull);
-        int cantidadTarimasQueen = infoBodega.queenquantity;
+        int cantidadTarimasQueen = config.bodega.Queen;
         sizes.push_back(cantidadTarimasQueen);
-        int cantidadTarimasTwin = infoBodega.twinquantity;
+        int cantidadTarimasTwin = config.bodega.Twin;
         sizes.push_back(cantidadTarimasTwin);
-        int cantidadTarimasKing = infoBodega.kingquantity;
+        int cantidadTarimasKing = config.bodega.King;
         sizes.push_back(cantidadTarimasKing);
 
 //sizes = [30, 20, 10, 15]
@@ -64,14 +69,14 @@ public:
 //name = [King, Queen, Full, Twin]
 
 //tarimas = [[{King}, {King}, {King}], [{Queen}, {Queen}, {Queen}]]
-        vector<string> name = infoColchones.name;
-        vector<int> peso = infoColchones.pesoColchon;
-        vector<int> alto = infoColchones.altoColchon;
-        vector<int> ancho = infoColchones.anchoColchon;
-        vector<int> largo = infoColchones.largoColchon;
-        for(int j = 0; i < 4; i++) {
-            for(int i = 0; i < sizes[j]; i++){
-                tarimas.push(llenarInventario(name[j], peso[j], alto[j], ancho[j], largo[j]));
+        vector<string> name = {config.king.name, config.queen.name, config.twin.name, config.full.name};
+        vector<int> peso = {config.king.peso, config.queen.peso, config.twin.peso, config.full.peso};
+        vector<int> alto = {config.king.alto, config.queen.alto, config.twin.alto, config.full.alto};
+        vector<int> ancho = {config.king.ancho, config.queen.ancho, config.twin.ancho, config.full.ancho};
+        vector<int> largo = {config.king.largo, config.queen.largo, config.twin.largo, config.full.largo};
+        for(int p = 0; p < 4; p++) {
+            for(int i = 0; i < sizes[p]; i++){
+                tarimas.push(llenarInventario(name[p], peso[p], alto[p], ancho[p], largo[p]));
             }
         } 
     }
@@ -81,17 +86,17 @@ public:
 // objeto, se puede usar el nombre del objeto como la key name para obtener cual tipo de colchón es, si el colchón es el
 // correcto, se puede verificar si la cantidad es la correcta
 
-    Stack<Colchon *> llenarInventario(string pName, int pPeso, int pAlto, int pAncho, int pLargo)
+    Stack llenarInventario(string pName, int pPeso, int pAlto, int pAncho, int pLargo)  //Stack<Colchon *> llenarInventario(string pName, int pPeso, int pAlto, int pAncho, int pLargo)
     {
-        Stack<Colchon *> tarimas2; //Esta definicion es incorrecta, ya que el Stack<Colchon *> es la manera de definir
+        Stack tarimas2;    //Stack<Colchon *> tarimas2; //Esta definicion es incorrecta, ya que el Stack<Colchon *> es la manera de definir
                                    //un vector, para crear un Stack que guarde objetos tipo Colchon nada más se define
                                    //un Stack y se hace push a objetos tipo Colchon, ya que el Stack recibe tipo void
                                    //por lo que se puede insertar cualquier tipo de dato
-        ConfigBodega infoBodega = configuracion.getConfigBodega();
-        int maxColchonesPorTarima = infoBodega.tarimasize;
+        int maxColchonesPorTarima = config.bodega.tarimaSize;
             for(int i=0; i < maxColchonesPorTarima; i++)
             {
-                Colchon colchon = new Colchon(pName, pPeso, pAlto, pAncho, pLargo);
+                Colchon* colchonPtr = new Colchon(pName, pPeso, pAlto, pAncho, pLargo);
+                Colchon colchon = *colchonPtr;
                 tarimas2.push(colchon);
             }
             // inicializar la lista de tarimas y puedo meter los colchones
@@ -99,16 +104,19 @@ public:
     }
 
 //Este método está bien, se aplicaría sacarColchones a tarimas y lo que se saque se deja en una pila de camión
-    metodos<Colchon *> sacarColchones(int pCantidad){
-        metodos<Colchon *> colchonesSacados;  // Crear una lista para almacenar los colchones sacados
+    metodos sacarColchones(int pCantidad)  //metodos<Colchon *> sacarColchones(int pCantidad){
+    {
+        metodos colchonesSacados;  // metodos<Colchon *> colchonesSacados;  // Crear una lista para almacenar los colchones sacados
     
         // Supongamos que deseas sacar colchones de la primera tarima
-        if (!tarimas.isEmpty()) {
-            ColchonStack tarima = tarimas.pop();  // Obtener la primera tarima de la lista
+        if (!tarimas.estaVacio()) {
+            void* tarimaPtr = tarimas.pop();    //ColchonStack tarima = tarimas.pop();  // Obtener la primera tarima de la lista
+            Stack tarima = *tarimaPtr;
     
             // Sacar pCantidad de colchones de la tarima
             for (int i = 0; i < pCantidad; i++) {
-                Colchon *colchon = tarima.pop();  // Sacar un colchon de la tarima
+                Colchon* colchonPtr = tarima.pop();  // Sacar un colchon de la tarima
+                Colchon cholchon = *colchonPtr;
                 if (colchon != nullptr) {
                     colchonesSacados.addToEnd(colchon);  // Agregar el colchon a la lista de colchones sacados
                 } else {
@@ -130,14 +138,27 @@ public:
     //dicha pila será modificada de igual manera, cuando se trabaja con este método hay
     //que tener cuidado, esto debido a que la información que se extraiga debería ser agregada
     //nuevamente, para no estar perdiendo información a lo largo del programa.
-    Stack<ColchonStack *> &getTarimas() {
+
+    Stack &getTarimas() {  //Stack<ColchonStack *> &getTarimas()
         return tarimas;
     }
 
     //Este método a diferencia del anterior, genera un copia, por lo que puedo
     //acceder a los datos de este sin necesidad de tener que volverlos a meter
-    Stack<ColchonStack *> getTarimasCopy() const {
+    Stack getTarimasCopy() const {  //Stack<ColchonStack *> getTarimasCopy() const
         return tarimas; // Devuelve una copia de la pila "tarimas"
     }
 
-}
+    void agregarTarima(Stack tarima)
+    {
+        tarimas.push(tarima);
+    }
+
+    // Método para sacar una tarima de la pila "tarimas"
+    Stack* sacarTarima()
+    {
+        Stack* ptrStack = static_cast<Stack*>(tarimas.pop());
+        return ptrStack;
+    }
+
+};

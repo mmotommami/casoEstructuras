@@ -1,3 +1,4 @@
+
 #include <string>
 #include "lista.h"     // Incluye el archivo de encabezado "lista.h", que contiene definiciones relacionadas con listas.
 #include <iostream>
@@ -26,15 +27,38 @@ public:
         int number2 = std::rand() % 900000000 + 100000000;
 
         number = number2;
-        /*
-        // Crea una nueva instancia de la lista "metodos" para almacenar punteros a objetos "Colchon".
-        colchones = new metodos<Colchon *>();
-        */
-
         cantidadColchonesFull = 0;
         cantidadColchonesKing = 0;
         cantidadColchonesQueen = 0;
         cantidadColchonesTwin = 0;
+        /*
+        // Crea una nueva instancia de la lista "metodos" para almacenar punteros a objetos "Colchon".
+        colchones = new metodos<Colchon *>();
+        */
+    }
+
+        // Getter para la cantidad de colchones Full.
+    int getCantidadColchonesFull() const
+    {
+        return cantidadColchonesFull;
+    }
+
+    // Getter para la cantidad de colchones King.
+    int getCantidadColchonesKing() const
+    {
+        return cantidadColchonesKing;
+    }
+
+    // Getter para la cantidad de colchones Queen.
+    int getCantidadColchonesQueen() const
+    {
+        return cantidadColchonesQueen;
+    }
+
+    // Getter para la cantidad de colchones Twin.
+    int getCantidadColchonesTwin() const
+    {
+        return cantidadColchonesTwin;
     }
 /*
     void addColchon(Colchon *pColchon)
