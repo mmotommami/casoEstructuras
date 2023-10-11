@@ -22,8 +22,7 @@ public:
         peso = pPeso;
         alto = pAlto;
         ancho = pAncho;
-        profundidad = pProfundidad;
-        
+        profundidad = pProfundidad;  
     }
 
     string getName()

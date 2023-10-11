@@ -24,16 +24,18 @@ public:
 
     void initSimulation()
     {
-        config = ConfigLoader::LoadConfig();
+//        config = ConfigLoader::LoadConfig();
         tarimaGroup = new TarimaGroup();
-        tarimaGroup->rellenar();
+//        tarimaGroup->rellenar();  //Este no es necesario inicialmente,
+//porque cuando se crea un objeto tipo tarimaGroup, el método rellenar 
+//es llamado y ejecutado de manera automatica desde el constructor
+        //tarimaGroup->rellenar();
         flotilla = new Flotilla();
         labogeda = new Bodega();
+        tarimaGroup->rellenar();
         labogeda->generarPedidos();
+//        labogeda->generarPedidos();
         labogeda->atenderPedido();
-        
-        
-
     }
 
     void thread_rellenar(){

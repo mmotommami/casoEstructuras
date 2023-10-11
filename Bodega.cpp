@@ -11,6 +11,7 @@
 #include <vector>
 #include "Stack.h"
 #include <string>
+#include <iostream>
 
 using namespace std;
 
@@ -115,7 +116,9 @@ public:
     //Hilo que se ejecute cada cierto tiempo
     void atenderPedido()
     {
-        bool estado = false;
+        std::cout << "Hola, mundo!" << std::endl;
+        std::cout << listaDePedidos.size() << std::endl;
+        std::cout << "---1" << std::endl;
 
         std::vector<Pedido> listaAuxiliar;
 
@@ -125,6 +128,12 @@ public:
 
             Pedido pedidoAnalizado = listaDePedidos.back();
             listaDePedidos.pop_back();
+
+            std::cout << pedidoAnalizado.getCantidadColchonesFull() << std::endl;
+            std::cout << pedidoAnalizado.getCantidadColchonesKing() << std::endl;
+            std::cout << pedidoAnalizado.getCantidadColchonesQueen() << std::endl;
+            std::cout << pedidoAnalizado.getCantidadColchonesTwin() << std::endl;
+            
 
 //listaDePedidos = [{}, {}, {}, {}] //Cada una de las llaves significa un objeto de tipo Pedido,
 //para acceder a cada cantidad se hace con pedidoAnalizado.cantidadColchonesFull;
@@ -137,12 +146,13 @@ public:
             //y dentro de este se cambia el valor booleano de "estado" a true.
             if(comprobarCantidad("Full", cantidadFull) && comprobarCantidad("King", cantidadKing) && comprobarCantidad("Queen", cantidadQueen) && comprobarCantidad("Twin", cantidadTwin)){
                 //vector<Colchon> cargaDeFull = cargarCamion("Full", cantidadFull);
-                std::cout << "Hola, mundo!" << std::endl;
+                std::cout << "Hola, mundo!!!!" << std::endl;
                 //Si un pedido es realizado, se revisa si listaAuxiliar.size() == 0, si es el caso todo bien, pero
                 //si no lo es debemos de sacar el tamaño con el .size y generar un for que saque tantos elementos
                 //como el tamaño de la listaAuxiliar diga y lo meta al vector de pedidos.
                 //Una vez que el pedido es realizado, se utiliza break; para salir del while
             } else {
+                std::cout << "JAJAJAJAJAJA" << std::endl;
                 listaAuxiliar.push_back(pedidoAnalizado);
             }
 
@@ -179,11 +189,51 @@ public:
     }
 
     bool comprobarCantidad(std::string pNombre, int pCantidadColchon) {
+        
+        Stack stackPrueba;
+        Stack miniStack;
         Stack copiaTarima = tarimaGroup.getTarimasCopy();  //Stack<ColchonStack *> copiaTarima
+        int lm = copiaTarima.largoPila();
+        std::cout << lm << std::endl;
+        std::cout << "---2" << std::endl;
+        std::cout << copiaTarima.largoPila() << std::endl;  //Esta línea genera problemas, mañana soluciono
         for(int h = 0; h < copiaTarima.largoPila(); h++) {
+            /*
+                        //Stack tarimaUnica = copiaTarima.pop();  //Stack<Colchon *> tarimaUnica
+            Stack* tarimaUnicaPtr = static_cast<Stack*>(copiaTarima.pop());
+            Stack tarimaUnica = *tarimaUnicaPtr;
+            std::cout << "ayudaaaaaaaaaaaaaaaaaaaaaa---------------" << std::endl;
+            std::cout << tarimaUnica.largoPila() << std::endl;
+            Colchon* cohol2 = new Colchon("Full", 1, 2, 3, 4);
+            Colchon cohol1 = *cohol2;
+            miniStack.push(&cohol1);
+            stackPrueba.push(&miniStack);
+            Stack* jaja = static_cast<Stack*>(stackPrueba.pop());
+            Stack jaja2 = *jaja;
+            Colchon* colho3ptr = static_cast<Colchon*>(jaja2.pop());
+            Colchon colho4 = *colho3ptr;
+            int a = colho4.getPeso();
+            std::cout << a << std::endl; //1
+            std::cout << "ayuda" << std::endl;
+            void* colchonPtr = tarimaUnica.pop();
+            std::cout << "ayuda" << std::endl;
+            Colchon* colchonPtr2 = static_cast<Colchon*>(colchonPtr);
+            std::cout << "ayuda" << std::endl;
+            Colchon colchonGuardado = *colchonPtr2;
+            std::cout << "ayuda" << std::endl;
+            int b = colchonGuardado.getPeso();
+            std::cout << "ayuda" << std::endl;
+            for(int k = 0; k < tarimaUnica.largoPila(); k++) {
+                Colchon* colchonPtr = static_cast<Colchon*>(tarimaUnica.pop());
+                Colchon colchonGuardado = *colchonPtr;
+            }
+            */
+            
             //Stack tarimaUnica = copiaTarima.pop();  //Stack<Colchon *> tarimaUnica
             Stack* tarimaUnicaPtr = static_cast<Stack*>(copiaTarima.pop());
             Stack tarimaUnica = *tarimaUnicaPtr;
+            std::cout << "ayuda324234234" << std::endl;
+            std::cout << tarimaUnica.largoPila() << std::endl;
             for(int k = 0; k < tarimaUnica.largoPila(); k++) {
                 Colchon* colchonPtr = static_cast<Colchon*>(tarimaUnica.pop());
                 Colchon colchonGuardado = *colchonPtr;
@@ -197,6 +247,7 @@ public:
                     }
                 }
             }
+        
         }
         return false;
     }

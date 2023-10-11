@@ -50,7 +50,6 @@ public:
             }
         }
         */
-       rellenar();
     }
 
     void rellenar() {
@@ -64,7 +63,7 @@ public:
         int cantidadTarimasKing = config.bodega.King;
         sizes.push_back(cantidadTarimasKing);
 
-//sizes = [30, 20, 10, 15]
+//sizes = [10, 8, 20, 10]
 
 //name = [King, Queen, Full, Twin]
 
@@ -75,10 +74,12 @@ public:
         vector<int> ancho = {config.king.ancho, config.queen.ancho, config.twin.ancho, config.full.ancho};
         vector<int> largo = {config.king.largo, config.queen.largo, config.twin.largo, config.full.largo};
         for(int p = 0; p < 4; p++) {
+            std::cout << "---a" << std::endl;
+            std::cout << sizes[p] << std::endl;
             for(int i = 0; i < sizes[p]; i++){
                 Stack datos = llenarInventario(name[p], peso[p], alto[p], ancho[p], largo[p]);
-                Stack* datosPtr = &datos;
-                tarimas.push(datosPtr);
+//                Stack* datosPtr = &datos;
+                tarimas.push(&datos);
             }
         } 
     }
@@ -97,9 +98,11 @@ public:
         int maxColchonesPorTarima = config.bodega.tarimaSize;
             for(int i=0; i < maxColchonesPorTarima; i++)
             {
+//                std::cout << "Se creó elemento" << std::endl;
                 Colchon* colchonPtr = new Colchon(pName, pPeso, pAlto, pAncho, pLargo);
                 Colchon colchon = *colchonPtr;
-                tarimas2.push(colchonPtr);
+//                std::cout << colchon.getName() << std::endl;
+                tarimas2.push(&colchon);
             }
             // inicializar la lista de tarimas y puedo meter los colchones
         return tarimas2;
@@ -120,7 +123,7 @@ public:
             for (int i = 0; i < pCantidad; i++) {
                 Colchon* colchonPtr = static_cast<Colchon*>(tarima.pop());  // Sacar un colchon de la tarima
                 Colchon colchon = *colchonPtr;
-                colchonesSacados.addToEnd(colchonPtr);  // Agregar el colchon a la lista de colchones sacados
+                colchonesSacados.addToEnd(&colchon);  // Agregar el colchon a la lista de colchones sacados
                 if (tarimaPtr == nullptr) {
                     break;
                 }

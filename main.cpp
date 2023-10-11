@@ -10,6 +10,16 @@ int main()
 
     Configuracion config = ConfigLoader::LoadConfig();
 
+    Stack pila;
+    int numero = 1;
+    pila.push(&numero);
+    int* ayudaPtr = static_cast<int*>(pila.pop());
+    int  ayuda = *ayudaPtr;
+    std::cout << ayuda << std::endl;
+    std::cout << pila.largoPila() << std::endl;
+    std::cout << "ayudaaaaaaaaaa" << std::endl;
+
+
     // Imprimir los valores de la configuración de la bodega
     std::cout << "Configuración de la bodega:" << std::endl;
     std::cout << "Twin Quantity: " << config.bodega.Twin << std::endl;
@@ -69,4 +79,4 @@ int main()
 */
     std::cout << "Hola, mundo!" << std::endl;
     return 0;
-}
+};
