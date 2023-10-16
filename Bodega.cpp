@@ -19,14 +19,15 @@ class Bodega
 {
 private:
 //    metodos<TarimaGroup> inventario; // crearia un objeto mejor //En segunda instancia me parece inútil
-    TarimaGroup tarimaGroup;
+    TarimaGroup* tarimaGroup;
     Configuracion config;
     Queue *pedidos;  // Queue<Pedido *> *pedidos
     vector<Pedido> listaDePedidos;
 
 public:
-    Bodega()
+    Bodega(TarimaGroup* pTarima)
     {
+        tarimaGroup = pTarima;
         config = ConfigLoader::LoadConfig();
         initBodega();
         // start al hilo de refill
@@ -46,7 +47,7 @@ public:
             //Manera de llenar inventario
             
 //            this_thread::sleep_for(config.bodega.refillTime);
-        tarimaGroup.rellenar();
+        tarimaGroup->rellenar();
             //En el main de simulador deberá haber algún tipo de creación de
             //thread que llame este método, para hacerlo nada más se debe
             //debe escribir thread <nombre del thread>(<nombre de este método>);
@@ -93,7 +94,7 @@ public:
             listaDePedidos.push_back(nuevoPedido);
         }
 
-
+/*
         //Esta lista de pedidos va a ser revisada con un pop_back, que obtiene el último
         //elemento ingresado al vector por el push_back, el elemento que se saque
 
@@ -107,13 +108,15 @@ public:
         //
         // una vez que termino
         // hago sleep de ConfigPedidos.tiempoEntreGeneracion
+*/
     }
-
+/*
     // thread o bien todo dentro de un thread en bodega
     // Este método atiende un pedido cada cierta cantidad de tiempo, por lo que se debe tener un thread
     // que llame a este método dependiendo de cada cuanto se quiera atender un pedido.
 
     //Hilo que se ejecute cada cierto tiempo
+*/
     void atenderPedido()
     {
         std::cout << "Hola, mundo!" << std::endl;
@@ -129,6 +132,7 @@ public:
             Pedido pedidoAnalizado = listaDePedidos.back();
             listaDePedidos.pop_back();
 
+            std::cout << "Los siguientes 4 valores corresponden al pedido" << std::endl;
             std::cout << pedidoAnalizado.getCantidadColchonesFull() << std::endl;
             std::cout << pedidoAnalizado.getCantidadColchonesKing() << std::endl;
             std::cout << pedidoAnalizado.getCantidadColchonesQueen() << std::endl;
@@ -147,6 +151,10 @@ public:
             if(comprobarCantidad("Full", cantidadFull) && comprobarCantidad("King", cantidadKing) && comprobarCantidad("Queen", cantidadQueen) && comprobarCantidad("Twin", cantidadTwin)){
                 //vector<Colchon> cargaDeFull = cargarCamion("Full", cantidadFull);
                 std::cout << "Hola, mundo!!!!" << std::endl;
+                cargarCamion("Full", cantidadFull);
+                cargarCamion("King", cantidadKing);
+                cargarCamion("Queen", cantidadQueen);
+                cargarCamion("Twin", cantidadTwin);
                 //Si un pedido es realizado, se revisa si listaAuxiliar.size() == 0, si es el caso todo bien, pero
                 //si no lo es debemos de sacar el tamaño con el .size y generar un for que saque tantos elementos
                 //como el tamaño de la listaAuxiliar diga y lo meta al vector de pedidos.
@@ -159,7 +167,7 @@ public:
         //Si el método acaba sin que se haya realizado ningún pedido, también se deberán de ingresar los datos
         //nuevamente a listaDePedidos
         }
-
+/*
         //Aquí con pedidoAnalizado.<cantidad de colchones del pedido> se debe verificar si esa cantidad puede
         //ser sacada del almacen, si no puede ser sacada, en un vector auxiliar se va a meter el pedido, para probar
         //con el siguiente, cabe aclarar que se deben revisar todas las cantidades de colchones que pide el pedido
@@ -178,7 +186,7 @@ public:
         // segun la cantidad asi los voy tirando a los camiones
         // flotillaManager->enviar(lista de colchones que arme de la orden);
         // sleep de tiempoEntreEnvioDePedidos
-
+*/
         int cantidadElementosA = listaAuxiliar.size();
         for(int k = 0; k < cantidadElementosA; k++) {
             Pedido pedidoSacado = listaAuxiliar.back();
@@ -190,14 +198,17 @@ public:
 
     bool comprobarCantidad(std::string pNombre, int pCantidadColchon) {
         
-        Stack stackPrueba;
-        Stack miniStack;
-        Stack copiaTarima = tarimaGroup.getTarimasCopy();  //Stack<ColchonStack *> copiaTarima
+        TarimaGroup tarimaGroup2 = *tarimaGroup;
+        std::cout << "Los siguientes 2 valores corresponden a la cantidad de pilas:" << std::endl;
+        Stack copiaTarima = tarimaGroup2.getTarimas();  //Stack<ColchonStack *> copiaTarima
         int lm = copiaTarima.largoPila();
         std::cout << lm << std::endl;
+        std::cout << tarimaGroup->sizeOfTarima() << std::endl;
         std::cout << "---2" << std::endl;
         std::cout << copiaTarima.largoPila() << std::endl;  //Esta línea genera problemas, mañana soluciono
+        std::cout << tarimaGroup2.sizeOfTarima() << std::endl;
         for(int h = 0; h < copiaTarima.largoPila(); h++) {
+            std::cout << "Entró" << std::endl;
             /*
                         //Stack tarimaUnica = copiaTarima.pop();  //Stack<Colchon *> tarimaUnica
             Stack* tarimaUnicaPtr = static_cast<Stack*>(copiaTarima.pop());
@@ -230,8 +241,46 @@ public:
             */
             
             //Stack tarimaUnica = copiaTarima.pop();  //Stack<Colchon *> tarimaUnica
-            Stack* tarimaUnicaPtr = static_cast<Stack*>(copiaTarima.pop());
-            Stack tarimaUnica = *tarimaUnicaPtr;
+            Stack* tarimaUnicaPtr2 = static_cast<Stack*>(copiaTarima.pop());
+        //    Stack* tarimaUnicaPtr = tarimaGroup2.sacarTarima();
+            std::cout << copiaTarima.largoPila() << std::endl;  //Esta línea genera problemas, mañana soluciono
+        //    std::cout << tarimaGroup2.sizeOfTarima() << std::endl;
+
+            Stack tarimaUnica = *tarimaUnicaPtr2;
+            std::cout << "ayuda324234234" << std::endl;
+            if(tarimaUnica.estaVacio())
+            {
+                std::cout << "Está vacío" << std::endl;
+            } else
+            {
+                std::cout << "Tiene elementos" << std::endl;
+                std::cout << tarimaUnica.largoPila() << std::endl;
+                std::cout << tarimaUnicaPtr2->largoPila() << std::endl;
+            }
+            tarimaGroup->hacerPop();
+            std::cout << "324234234" << std::endl;
+            std::cout << tarimaGroup->sizeOfTarima() << std::endl;
+/*
+            void* colchonVoid = tarimaUnica.pop();
+            std::cout << "Lo que está fallando es la conversión" << std::endl;
+            Colchon* colchonPtr4 = static_cast<Colchon*>(colchonVoid);
+
+            void* colchonPtr5 = tarimaUnica.pop();
+            Colchon* colchonPtr4 = static_cast<Colchon*>(colchonPtr5);
+
+            Colchon* colchonPtr4 = reinterpret_cast<Colchon*>(tarimaUnica.pop());
+*/
+            Colchon* colchonPtr4 = static_cast<Colchon*>(tarimaUnica.pop());
+
+            std::cout << tarimaUnica.largoPila() << std::endl;
+
+//            void* colchonVoidPtr = tarimaUnica.pop();
+//            Colchon* colchonPtr4 = static_cast<Colchon*>(static_cast<Colchon*>(colchonVoidPtr));
+
+            std::cout << "Pasó" << std::endl;
+            Colchon colchonGuardado4 = *colchonPtr4;
+            std::cout << "Pasó" << std::endl;
+            std::cout << colchonGuardado4.getName() << std::endl;
             std::cout << "ayuda324234234" << std::endl;
             std::cout << tarimaUnica.largoPila() << std::endl;
             for(int k = 0; k < tarimaUnica.largoPila(); k++) {
@@ -261,11 +310,11 @@ public:
         //Lista auxiliar que será usada para guardar los elementos que no correspondan al tipo correcto de datos,
         //una vez el método finaliza, dicha lista auxiliar tendrá que volver a meter los elementos que sacó a la
         //copia directa de tarimas
-        Stack copiaTarimas = tarimaGroup.getTarimasCopy();  //Stack<ColchonStack *> copiaDirectaTarimas
+        Stack copiaTarimas = tarimaGroup->getTarimasCopy();  //Stack<ColchonStack *> copiaDirectaTarimas
         //Con esto se saca un puntero directo a tarimas, si dicha copia es modificada, tarimas también lo hace
         for(int h = 0; h < copiaTarimas.largoPila(); h++) { //2
             //Se empieza a recorrer la pila tarimas
-            Stack* tarimaUnicaPtr = tarimaGroup.sacarTarima();
+            Stack* tarimaUnicaPtr = tarimaGroup->sacarTarima();
             Stack tarimaUnica = *tarimaUnicaPtr;
 //            Stack* tarimaUnica = copiaDirectaTarimas.pop();  //Stack<Colchon *> tarimaUnica
             //Tarima con colchones del mismo tipo
@@ -280,7 +329,7 @@ public:
                         void* colchonGuardado = static_cast<void*>(&colchonGuardadoSinPtr);
                         tarimaUnica.push(colchonGuardado);
                         listaAuxiliar.push_back(tarimaUnica);
-                        Stack* tarimaUnicaPtr = tarimaGroup.sacarTarima();
+                        Stack* tarimaUnicaPtr = tarimaGroup->sacarTarima();
                         Stack tarimaUnica = *tarimaUnicaPtr;
                     } else {
                         camion.push_back(colchonGuardadoSinPtr);
@@ -288,7 +337,7 @@ public:
                 }
                 int pushes = listaAuxiliar.size();
                 while(pushes != 0) {
-                    tarimaGroup.agregarTarima(tarimaUnica);
+                    tarimaGroup->agregarTarima(tarimaUnica);
 //                    copiaDirectaTarimas.push(tarimaUnica)
                     Stack tarimaUnica = listaAuxiliar.back();  //Stack<Colchon *> tarimaUnica
                     listaAuxiliar.pop_back();
@@ -300,7 +349,7 @@ public:
         }
         int cantidadElementos = listaAuxiliar.size();
         while(cantidadElementos != 0) {
-            tarimaGroup.agregarTarima(tarimaUnica);
+            tarimaGroup->agregarTarima(tarimaUnica);
             Stack tarimaUnica = listaAuxiliar.back();  //Stack<Colchon *> tarimaUnica
             listaAuxiliar.pop_back();
             cantidadElementos--;
@@ -308,6 +357,13 @@ public:
 
         return camion;
     }
+
+    Colchon* sacarColchonDeTarima(Stack pTarima)
+    {
+        Colchon* colchonSacado = static_cast<Colchon*>(pTarima.pop());
+        return colchonSacado;
+    }
+    
 };
 
 #endif

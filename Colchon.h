@@ -27,12 +27,12 @@ public:
 
     string getName()
     {
-        return name;
+        return this->name;
     }
 
     int getPeso()
     {
-        return peso;
+        return this->peso;
     }
 };
 

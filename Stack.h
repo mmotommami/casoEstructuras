@@ -2,7 +2,6 @@
 #define _STACK_ 0
 
 #include "lista.h"
-// #include "colchon.h"
 
 // usar el generic
 struct Stack

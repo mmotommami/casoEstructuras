@@ -26,6 +26,7 @@ public:
     TarimaGroup()
     {
         config = ConfigLoader::LoadConfig();
+        Stack tarimas;
         /*
         ConfigBodega infoBodega = configuracion.getConfigBodega();
         ConfigColchones infoColchones = configuracion.getConfigColchones();
@@ -64,9 +65,7 @@ public:
         sizes.push_back(cantidadTarimasKing);
 
 //sizes = [10, 8, 20, 10]
-
 //name = [King, Queen, Full, Twin]
-
 //tarimas = [[{King}, {King}, {King}], [{Queen}, {Queen}, {Queen}]]
         vector<string> name = {config.king.name, config.queen.name, config.twin.name, config.full.name};
         vector<int> peso = {config.king.peso, config.queen.peso, config.twin.peso, config.full.peso};
@@ -76,12 +75,40 @@ public:
         for(int p = 0; p < 4; p++) {
             std::cout << "---a" << std::endl;
             std::cout << sizes[p] << std::endl;
+            //Hasta aquí todo bien
             for(int i = 0; i < sizes[p]; i++){
+//                std::cout << "Marca para saber si el problema es con el size" << std::endl;
+//                tarimas.pop();
+//                std::cout << tarimas.largoPila() << std::endl;
                 Stack datos = llenarInventario(name[p], peso[p], alto[p], ancho[p], largo[p]);
 //                Stack* datosPtr = &datos;
+//                tarimas.push(&datos);
+//                std::cout << datos.largoPila() << std::endl;
+//                agregarTarima(datos);
                 tarimas.push(&datos);
+                std::cout << "marca" << std::endl;
+                std::cout << sizeOfTarima() << std::endl;
+                std::cout << "marca" << std::endl;
             }
-        } 
+        }
+        Colchon colchonPrueba("Puto", 1, 2, 3, 4);
+        Stack* prueba = static_cast<Stack*>(tarimas.pop());
+        std::cout << "..." << std::endl;
+        Stack pila = *prueba;
+        std::cout << pila.largoPila() << std::endl;
+        std::cout << "..." << std::endl;
+        Colchon* colchonPtr4 = static_cast<Colchon*>(pila.pop());
+        std::cout << "..." << std::endl;
+        Colchon jsjs = *colchonPtr4;
+        std::cout << "..." << std::endl;
+        int k = colchonPrueba.getPeso();
+        std::cout << k << std::endl;
+        string ar = colchonPtr4->getName();
+        std::cout << ar << std::endl;
+        std::cout << "..." << std::endl;
+        std::cout << "Cantidad de elementos de tarimas" << std::endl;
+        std::cout << tarimas.largoPila() << std::endl;
+        std::cout << "Cantidad de elementos de tarimas" << std::endl;
     }
 
 // tarimas = [[{objetoColchon<Tipo Específico(King, Queen, etc)>}, {objetoColchon<Tipo Específico(King, Queen, etc)>}], [{objetoColchon<Tipo Específico(King, Queen, etc)>}], [{objetoColchon<Tipo Específico(King, Queen, etc)>}]]
@@ -101,10 +128,15 @@ public:
 //                std::cout << "Se creó elemento" << std::endl;
                 Colchon* colchonPtr = new Colchon(pName, pPeso, pAlto, pAncho, pLargo);
                 Colchon colchon = *colchonPtr;
-//                std::cout << colchon.getName() << std::endl;
+                colchon.getName();
                 tarimas2.push(&colchon);
             }
             // inicializar la lista de tarimas y puedo meter los colchones
+//        std::cout << tarimas2.largoPila() << std::endl;  //Siempre es 100 debido a que es lo que trae el json
+//        std::cout << "!2#$%&/()=?¡134567890" << std::endl;
+        std::cout << "Cantidad de elementos Colchon" << std::endl;
+        std::cout << tarimas2.largoPila() << std::endl;
+        std::cout << "Cantidad de elementos Colchon" << std::endl;
         return tarimas2;
     }
 
@@ -167,6 +199,15 @@ public:
         return ptrStack;
     }
 
+    int sizeOfTarima()
+    {
+        return tarimas.largoPila();
+    }
+
+    void hacerPop()
+    {
+        tarimas.pop();
+    }
 };
 
 #endif
