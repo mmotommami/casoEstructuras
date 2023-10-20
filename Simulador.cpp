@@ -30,48 +30,54 @@ public:
 //        config = ConfigLoader::LoadConfig();
         tarimaGroup = new TarimaGroup();
         flotilla = new Flotilla();
+        tarimaGroup->rellenar();
         labogeda = new Bodega(tarimaGroup);
-//        tarimaGroup->rellenar();  //Este no es necesario inicialmente,
-//porque cuando se crea un objeto tipo tarimaGroup, el método rellenar 
-//es llamado y ejecutado de manera automatica desde el constructor
+//        tarimaGroup->rellenar(); 
         //tarimaGroup->rellenar();
         
-//        tarimaGroup->rellenar();
-        std::thread thread_rellenar();
-/*        
+//        std::thread hiloRellenar(thread_rellenar);
+
+//        hiloRellenar.join();
+        
         std::cout << "pi" << std::endl;  //Lo ideal sería poder pasar tarimaGroup dentro de labodega,
                                          //porque al parecer tarima group si tiene las cosas bien
         std::cout << tarimaGroup->sizeOfTarima() << std::endl;
         std::cout << "pi" << std::endl;
-*/
-//        labogeda->generarPedidos();
-        std::thread thread_generarP();
-//        labogeda->atenderPedido();
-        std::thread thread_atenderP();
+
+        labogeda->generarPedidos();
+//        std::thread thread_generarP;
+        labogeda->atenderPedido();
+//        std::thread thread_atenderP;
     }
 
-    void thread_rellenar(){
+    void thread_rellenar() {
+        
         while(true)
         {
             tarimaGroup->rellenar();
             std::this_thread::sleep_for(std::chrono::seconds(config.bodega.refillTime));
         }
+        
     }
 
     void thread_generarP() {
+        
         while(true)
         {
             labogeda->generarPedidos();
             std::this_thread::sleep_for(std::chrono::seconds(config.pedidos.tiempoEntreGeneracion));
         }
+        
     }
 
     void thread_atenderP() {
+        
         while(true)
         {
             labogeda->atenderPedido();
             std::this_thread::sleep_for(std::chrono::seconds(config.pedidos.tiempoEntreEnvioDePedidos));
         }
+        
     }
 };
 

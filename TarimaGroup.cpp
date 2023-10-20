@@ -10,7 +10,7 @@
 
 using namespace std;
 
-class TarimaGroup
+class TarimaGroup  //Convertir
 {
 private:
     int cantidadColchones;
@@ -85,13 +85,13 @@ public:
 //                tarimas.push(&datos);
 //                std::cout << datos.largoPila() << std::endl;
 //                agregarTarima(datos);
-                tarimas.push(&datos);
+                gtarimas.push(&datos);
                 std::cout << "marca" << std::endl;
                 std::cout << sizeOfTarima() << std::endl;
                 std::cout << "marca" << std::endl;
             }
         }
-        Colchon colchonPrueba("Puto", 1, 2, 3, 4);
+        Colchon colchonPrueba("Tipo", 1, 2, 3, 4);
         Stack* prueba = static_cast<Stack*>(tarimas.pop());
         std::cout << "..." << std::endl;
         Stack pila = *prueba;
@@ -101,7 +101,7 @@ public:
         std::cout << "..." << std::endl;
         Colchon jsjs = *colchonPtr4;
         std::cout << "..." << std::endl;
-        int k = colchonPrueba.getPeso();
+        int k = jsjs.getPeso();
         std::cout << k << std::endl;
         string ar = colchonPtr4->getName();
         std::cout << ar << std::endl;
@@ -118,18 +118,22 @@ public:
 
     Stack llenarInventario(string pName, int pPeso, int pAlto, int pAncho, int pLargo)  //Stack<Colchon *> llenarInventario(string pName, int pPeso, int pAlto, int pAncho, int pLargo)
     {
-        Stack tarimas2;    //Stack<Colchon *> tarimas2; //Esta definicion es incorrecta, ya que el Stack<Colchon *> es la manera de definir
-                                   //un vector, para crear un Stack que guarde objetos tipo Colchon nada más se define
-                                   //un Stack y se hace push a objetos tipo Colchon, ya que el Stack recibe tipo void
-                                   //por lo que se puede insertar cualquier tipo de dato
+        Stack tarimas2;   
+        //Stack<Colchon *> tarimas2; //Esta definicion es incorrecta, ya que el Stack<Colchon *> es la manera de definir
+                                     //un vector, para crear un Stack que guarde objetos tipo Colchon nada más se define
+                                     //un Stack y se hace push a objetos tipo Colchon, ya que el Stack recibe tipo void
+                                     //por lo que se puede insertar cualquier tipo de dato
         int maxColchonesPorTarima = config.bodega.tarimaSize;
             for(int i=0; i < maxColchonesPorTarima; i++)
             {
 //                std::cout << "Se creó elemento" << std::endl;
+/*
                 Colchon* colchonPtr = new Colchon(pName, pPeso, pAlto, pAncho, pLargo);
                 Colchon colchon = *colchonPtr;
                 colchon.getName();
-                tarimas2.push(&colchon);
+*/
+                Colchon* colchon = generarColchon(pName, pPeso, pAlto, pAncho, pLargo);
+                tarimas2.push(colchon);
             }
             // inicializar la lista de tarimas y puedo meter los colchones
 //        std::cout << tarimas2.largoPila() << std::endl;  //Siempre es 100 debido a que es lo que trae el json
@@ -138,6 +142,12 @@ public:
         std::cout << tarimas2.largoPila() << std::endl;
         std::cout << "Cantidad de elementos Colchon" << std::endl;
         return tarimas2;
+    }
+
+    Colchon* generarColchon(string pName, int pPeso, int pAlto, int pAncho, int pLargo) 
+    {
+        Colchon *nuevoColchon = new Colchon(pName, pPeso, pAlto, pAncho, pLargo);
+        return nuevoColchon;
     }
 
 //Este método está bien, se aplicaría sacarColchones a tarimas y lo que se saque se deja en una pila de camión
@@ -185,6 +195,11 @@ public:
     Stack getTarimasCopy() const {  //Stack<ColchonStack *> getTarimasCopy() const
         return tarimas; // Devuelve una copia de la pila "tarimas"
     }
+    
+    void setTarimas(Stack pTarimas)
+    {
+        tarimas = pTarimas;
+    }
 
     void agregarTarima(Stack tarima)
     {
@@ -207,6 +222,29 @@ public:
     void hacerPop()
     {
         tarimas.pop();
+    }
+
+    void prueba()
+    {
+        std::cout << "!2#$%&/()=?¡134567890" << std::endl;
+        Stack* prueba = static_cast<Stack*>(tarimas.pop());
+        std::cout << "..." << std::endl;
+        Stack pila = *prueba;
+        std::cout << pila.largoPila() << std::endl;
+        std::cout << "..." << std::endl;
+        Colchon* colchonPtr4 = static_cast<Colchon*>(pila.pop());
+        std::cout << "..." << std::endl;
+        Colchon jsjs = *colchonPtr4;
+        std::cout << "..." << std::endl;
+        int k = jsjs.getPeso();
+        std::cout << k << std::endl;
+        string ar = colchonPtr4->getName();
+        std::cout << ar << std::endl;
+        std::cout << "..." << std::endl;
+        std::cout << "Cantidad de elementos de tarimas" << std::endl;
+        std::cout << tarimas.largoPila() << std::endl;
+        std::cout << "Cantidad de elementos de tarimas" << std::endl;
+        std::cout << "!2#$%&/()=?¡134567890" << std::endl;
     }
 };
 

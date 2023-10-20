@@ -15,6 +15,9 @@ private:
     int cantidadColchonesKing;
     int cantidadColchonesQueen;
     int cantidadColchonesTwin;
+
+    //Crear arrayDeEnteros para guardar todas las cantidades de colchones
+
 //    metodos<Colchon *> colchones;   // Almacena una lista de punteros a objetos de la clase "Colchon".
 
 public:
@@ -37,7 +40,7 @@ public:
         */
     }
 
-        // Getter para la cantidad de colchones Full.
+    // Getter para la cantidad de colchones Full.
     int getCantidadColchonesFull() const
     {
         return cantidadColchonesFull;

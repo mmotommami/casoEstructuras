@@ -3,7 +3,6 @@
 
 #include "lista.h"
 
-// usar el generic
 struct Stack
 {
     struct metodos pila;
