@@ -1,64 +1,66 @@
 {
     "hora" : 60,
     "cantidadCamiones" : 8,
-    "colchones" :
-    [
-        {
-            "name" : "Full", 
-            "peso" : 28,
-            "ancho" : 137,
-            "largo" : 191,
-            "alto" : 30
-        }, 
-        {
-            "name" : "Queen", 
-            "peso" : 41,
-            "ancho" : 152,
-            "largo" : 203,
-            "alto" : 30
-        }, 
-        {
-            "name" : "Twin", 
-            "peso" : 16,
-            "ancho" : 99,
-            "largo" : 191,
-            "alto" : 30
-        }, 
-        {
-            "name" : "King", 
-            "peso" : 54,
-            "ancho" : 193,
-            "largo" : 203,
-            "alto" : 30
-        }
-    ],
-    "rutas" :
-    [
-        {
-            "name" : "ruta1", 
-            "velocidad" : "50km/h",
-            "distancia" : "16km",
-            "tiempo" : 20
-        }, 
-        {
-            "name" : "ruta2",
-            "velocidad" : "50km/h",
-            "distancia" : "13km",
-            "tiempo" : 15
-        }, 
-        {
-            "name" : "ruta3",
-            "velocidad" : "50km/h",
-            "distancia" : "39km",
-            "tiempo" : 45
-        }, 
-        {
-            "name" : "ruta4",
-            "velocidad" : "50km/h",
-            "distancia" : "115km",
-            "tiempo" : 115
-        } 
-    ],
+    "Full" :
+    {
+        "name" : "Full",
+        "peso" : 28,
+        "largo" : 191,
+        "ancho" : 137,
+        "alto" : 30
+    },
+    "Twin" :
+    {
+        "name" : "Twin",
+        "peso" : 16,
+        "largo" : 191,
+        "ancho" : 99,
+        "alto" : 30
+    },
+    "Queen" :
+    {
+        "name" : "Queen",
+        "peso" : 41,
+        "largo" : 191,
+        "ancho" : 203,
+        "alto" : 30
+    },
+    "King" :
+    {
+        "name" : "King",
+        "peso" : 54,
+        "largo" : 203,
+        "ancho" : 193,
+        "alto" : 30
+    },
+    "ruta1" :
+    {
+        "name" : "ruta1",
+        "velocidad" : "50km/h",
+        "distancia" : 115,
+        "tiempo" : 115
+    },
+    "ruta2" :
+    {
+        "name" : "ruta2",
+        "velocidad" : "50km/h",
+        "distancia" : 13,
+        "tiempo" : 15
+    },
+    "ruta3" :
+    {
+        "name" : "ruta3",
+        "velocidad" : "50km/h",
+        "distancia" : 16,
+        "tiempo" : 20
+    },
+    "ruta4" :
+    {
+        "name" : "ruta4",
+        "velocidad" : "50km/h",
+        "distancia" : 39,
+        "tiempo" : 45
+    },
     "camion" : 
     {
         "capacidad" : 1000,
@@ -72,7 +74,7 @@
         "Full" : 8,
         "Queen" : 20,
         "King" : 10,
-        "tarimaSize" : 30,
+        "tarimaSize" : 100,
         "refillTime" : 60
     },
     "pedidos" : 
@@ -83,12 +85,5 @@
         "minColchonesPorPedido" : 10,
         "maxColchonesPorPedido" : 100,
         "tiempoEntreEnvioDePedidos" : 10
-    },
-    "cargaDescarga20" :
-    {
-        "Twin" : 5,
-        "Full" : 10,
-        "Queen" : 10,
-        "King" : 20
     }
 }

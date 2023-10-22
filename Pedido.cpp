@@ -1,63 +1,99 @@
+
 #include <string>
-<<<<<<< HEAD
 #include "lista.h"     // Incluye el archivo de encabezado "lista.h", que contiene definiciones relacionadas con listas.
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
 
-using namespace std;   // Utiliza el espacio de nombres "std" para que las clases y funciones estándar de C++ se puedan usar sin anteponer "std::".
-=======
-#include "lista.h"
-
 using namespace std;
->>>>>>> bf8eb10e6acccf1baf9e52cd97b29303a7b412b2
 
 class Pedido
 {
 private:
-<<<<<<< HEAD
     int number;         // Almacena el número de pedido.
-    struct t_date fecha;    // Almacena una estructura de fecha (la definición no se proporciona en este código).
-    metodos<Colchon *> colchones;   // Almacena una lista de punteros a objetos de la clase "Colchon".
-=======
-    int number;
-    struct t_date fecha;
-    metodos<Colchon *> colchones;
->>>>>>> bf8eb10e6acccf1baf9e52cd97b29303a7b412b2
+    int cantidadColchonesFull;
+    int cantidadColchonesKing;
+    int cantidadColchonesQueen;
+    int cantidadColchonesTwin;
+
+    //Crear arrayDeEnteros para guardar todas las cantidades de colchones
+
+//    metodos<Colchon *> colchones;   // Almacena una lista de punteros a objetos de la clase "Colchon".
 
 public:
-    Pedido(int pCantidad)
+    Pedido()
     {
-<<<<<<< HEAD
         // Inicializa el generador de números aleatorios con la hora actual.
         std::srand(static_cast<unsigned>(std::time(nullptr)));
         
         // Genera un número aleatorio de 9 dígitos.
-        number = std::rand() % 900000000 + 100000000;
-        
+        int number2 = std::rand() % 900000000 + 100000000;
+
+        number = number2;
+        cantidadColchonesFull = 0;
+        cantidadColchonesKing = 0;
+        cantidadColchonesQueen = 0;
+        cantidadColchonesTwin = 0;
+        /*
         // Crea una nueva instancia de la lista "metodos" para almacenar punteros a objetos "Colchon".
-=======
-        // numero de orden puede ser un random grande
->>>>>>> bf8eb10e6acccf1baf9e52cd97b29303a7b412b2
         colchones = new metodos<Colchon *>();
+        */
     }
 
+    // Getter para la cantidad de colchones Full.
+    int getCantidadColchonesFull() const
+    {
+        return cantidadColchonesFull;
+    }
+
+    // Getter para la cantidad de colchones King.
+    int getCantidadColchonesKing() const
+    {
+        return cantidadColchonesKing;
+    }
+
+    // Getter para la cantidad de colchones Queen.
+    int getCantidadColchonesQueen() const
+    {
+        return cantidadColchonesQueen;
+    }
+
+    // Getter para la cantidad de colchones Twin.
+    int getCantidadColchonesTwin() const
+    {
+        return cantidadColchonesTwin;
+    }
+
+    void setCantidadColchonesFull(int cantidad)
+    {
+        cantidadColchonesFull = cantidad;
+    }
+
+    void setCantidadColchonesKing(int cantidad)
+    {
+        cantidadColchonesKing = cantidad;
+    }
+
+    void setCantidadColchonesQueen(int cantidad)
+    {
+        cantidadColchonesQueen = cantidad;
+    }
+
+    void setCantidadColchonesTwin(int cantidad)
+    {
+        cantidadColchonesTwin = cantidad;
+    }
+/*
     void addColchon(Colchon *pColchon)
     {
-<<<<<<< HEAD
         // Agrega un objeto "Colchon" a la lista "colchones" al principio de la lista.
         colchones.addToBegining(pColchon);
-=======
-        // agrego colchones a la lista
->>>>>>> bf8eb10e6acccf1baf9e52cd97b29303a7b412b2
     }
 
     int getCantidadColchones()
     {
-<<<<<<< HEAD
         // Devuelve el tamaño actual de la lista "colchones" (cantidad de objetos "Colchon" almacenados).
-=======
->>>>>>> bf8eb10e6acccf1baf9e52cd97b29303a7b412b2
         return colchones->size();
     }
-}
+*/
+};

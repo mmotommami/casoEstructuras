@@ -1,85 +1,82 @@
-#include "lista.h"
-#include "Queue.h"
-#include "Stack.h"
-#include "colchon.h"
-#include "camion.h"
+#include "Simulador.cpp"
+#include "ConfigLoader.cpp"
+
 #include <iostream>
-#include <thread>
 
-
-using namespace std;
-
-//Se crearon las pilas y colas necesarias
-
-struct Stack listaAlmacenS;
-struct Stack listaAlmacenL;
-struct Stack pilaCamion;
-struct Queue colaCarga;
-struct Queue colaDescarga;
-
-//Se crea el objeto camion, el único dato importante de este objeto es la capacidad máxima, ya que si el peso
-//del pedido excede dicha capacidad, el pedido no se puede realizar
-camion camion1 = new camion(1000, 2.45, 4.10);
-
-//Valor booleano usado para saber cuando partir con el transporte de productos
-bool estadoCarga = false;
-
-
-void t_carga()
+int main()
 {
-    this_thread::sleep_for(1s);  //Este segundo es solo temporal, el tiempo de carga de cada objeto tiene que ser
-                                 //sacado con el parser del archivo .json
-}
+    // Crear una instancia de Simulador
+    Simulador simulador;
 
-int main(){
-//Estos for son para meter colchones a la lista, por ahora desconozco de que manera debería hacerlo
-//-------------------------------------------------------------------------------------------------
-    for(int i=0; i<10; i++) {
-        colchon* miColchon = new colchon("King", 54, "193CMx203CM");
-        listaAlmacenS.push(miColchon);
-    }
+    Configuracion config = ConfigLoader::LoadConfig();
 
-    for(int i=0; i<10; i++) {
-        colchon* miColchon = new colchon("Queen", 41, "152CMx203CM");
-        listaAlmacenS.push(miColchon);
-        
-    }
+    Stack pila;
+    int numero = 1;
+    pila.push(&numero);
+    int* ayudaPtr = static_cast<int*>(pila.pop());
+    int  ayuda = *ayudaPtr;
+    std::cout << ayuda << std::endl;
+    std::cout << pila.largoPila() << std::endl;
+    std::cout << "ayudaaaaaaaaaa" << std::endl;
 
-    for(int i=0; i<10; i++) {
-        colchon* miColchon = new colchon("Full", 28, "137CMx191CM");
-        listaAlmacenS.push(miColchon);
-    }
 
-    for(int i=0; i<10; i++) {
-        colchon* miColchon = new colchon("Twin", 16, "99CMx191CM");
-        listaAlmacenS.push(miColchon);
-    }
-//-------------------------------------------------------------------------------------------------
-
-//Tengo que definir de que manera se va a solicitar el pedido
-
-//Buscar como sacar la información con un parser
-
-    //Antes de la carga se podría crear una comprobación, en caso de que el peso de los productos del pedido excedan
-    //la capacidad máxima del camión
-
-    for(int i=0; i<20; i++) { //En este caso, el 10 se refiere a 10 items, aquí tengo que buscar la manera de hacer que
-                              //se cargue según lo que el usuario solicita, por otra parte, lo ideal sería tener una pila
-                              //auxiliar a la pila del almacen, esto para poder recorrer la pila del alamacen y buscar con
-                              //un getName de cada objeto colchon, para así revisar si el objeto es el que se quiere meter
-                              //tipo si se tiene que se quieren meter 10 colchones tipo "King", entonces se va a sacar uno
-                              //a uno cada elemento para así aplicarles un getName, si el nombre es el correcto, se añade
-                              //a la pila del camion y se pregunta si el pedido está completo, para esto se puede tener un
-                              //contador de la cantidad de colchones de cada tipo, una vez está completo, con un parámetro
-                              //bool se puede dar arranque al transporte de los productos
-        colchon* colchonActual = listaAlmacenS.pop();
-        thread carga(t_carga);
-        carga.join();
-        colaCarga.enqueue(colchonActual);
-    }
-    //Esto también podría hacerse con un while, mientras la carga esté incompleta (false), repetir el ciclo, una vez se
-    //completa, salir de dicho ciclo
-
+    // Imprimir los valores de la configuración de la bodega
+    std::cout << "Configuración de la bodega:" << std::endl;
+    std::cout << "Twin Quantity: " << config.bodega.Twin << std::endl;
+    std::cout << "Full Quantity: " << config.bodega.Full << std::endl;
+    std::cout << "Queen Quantity: " << config.bodega.Queen << std::endl;
+    std::cout << "King Quantity: " << config.bodega.King << std::endl;
+    std::cout << "Tarima Size: " << config.bodega.tarimaSize << std::endl;
+    std::cout << "Refill Time: " << config.bodega.refillTime << std::endl;
     
-    
-}
+    vector<string> name = {config.king.name, config.queen.name, config.twin.name, config.full.name};
+    vector<int> peso = {config.king.peso, config.queen.peso, config.twin.peso, config.full.peso};
+    vector<int> alto = {config.king.alto, config.queen.alto, config.twin.alto, config.full.alto};
+    vector<int> ancho = {config.king.ancho, config.queen.ancho, config.twin.ancho, config.full.ancho};
+    vector<int> largo = {config.king.largo, config.queen.largo, config.twin.largo, config.full.largo};
+
+    std::cout << "Configuración de colchones:" << std::endl;
+    for (size_t i = 0; i < 4; ++i) {
+        std::cout << "Nombre: " << name[i] << std::endl;
+        std::cout << "Peso: " << peso[i] << std::endl;
+        std::cout << "Ancho: " << ancho[i] << std::endl;
+        std::cout << "Largo: " << largo[i] << std::endl;
+        std::cout << "Alto: " << alto[i] << std::endl;
+        std::cout << std::endl; // Separador entre colchones
+    }
+
+/*
+    // Obtener la configuración de la bodega y almacenarla en un objeto
+    ConfigBodega configBodega = Configloader.getConfigBodega();
+
+    // Obtener la configuración de colchones y almacenarla en un objeto
+    ConfigColchones configColchones = configLoader.getConfigColchones();
+
+    // Imprimir los valores de la configuración de la bodega
+    std::cout << "Configuración de la bodega:" << std::endl;
+    std::cout << "Twin Quantity: " << configBodega.twinquantity << std::endl;
+    std::cout << "Full Quantity: " << configBodega.fullquantity << std::endl;
+    std::cout << "Queen Quantity: " << configBodega.queenquantity << std::endl;
+    std::cout << "King Quantity: " << configBodega.kingquantity << std::endl;
+    std::cout << "Tarima Size: " << configBodega.tarimasize << std::endl;
+    std::cout << "Refill Time: " << configBodega.refilltime << std::endl;
+
+    // Imprimir los valores de la configuración de colchones
+    std::cout << "Configuración de colchones:" << std::endl;
+    for (size_t i = 0; i < configColchones.name.size(); ++i) {
+        std::cout << "Nombre: " << configColchones.name[i] << std::endl;
+        std::cout << "Peso: " << configColchones.pesoColchon[i] << std::endl;
+        std::cout << "Ancho: " << configColchones.anchoColchon[i] << std::endl;
+        std::cout << "Largo: " << configColchones.largoColchon[i] << std::endl;
+        std::cout << "Alto: " << configColchones.altoColchon[i] << std::endl;
+        std::cout << std::endl; // Separador entre colchones
+    }
+
+    // Ejecutar la simulación
+ //   simulador.initSimulation();
+
+    // Puedes agregar aquí la lógica adicional si es necesario
+*/
+    std::cout << "Hola, mundo!" << std::endl;
+    return 0;
+};

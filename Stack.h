@@ -2,9 +2,7 @@
 #define _STACK_ 0
 
 #include "lista.h"
-// #include "colchon.h"
 
-// usar el generic
 struct Stack
 {
     struct metodos pila;
@@ -13,6 +11,10 @@ struct Stack
     "el camion como tal , podria verse tal vez como pila, como por ejemplo los camiones que son cerrados,
     tenes que llenarnos de adentro hacia afuera y cuando se descargan se sacan del frente hacia adentro"
     */
+    int largoPila()
+    {
+        return pila.getSize();
+    }
 
     bool estaVacio()
     {

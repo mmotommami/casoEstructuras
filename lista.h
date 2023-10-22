@@ -2,7 +2,6 @@
 #define _LISTAGENERICA_ 1
 
 #include "nodo.h"
-// #include "colchon.h"
 #include <stdlib.h>
 
 using namespace std;
@@ -76,7 +75,7 @@ struct metodos
     void *removeFirst()
     {
 
-        colchon *result = nullptr;
+        void *result = nullptr;
         struct nodo *cursor = start;
 
         if (size > 1)

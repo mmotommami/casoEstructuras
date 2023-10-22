@@ -15,7 +15,7 @@ struct Queue {
         return cola.isEmpty();
     };
 
-    void enqueue(colchon* pElement) {
+    void enqueue(void* pElement) {
         cola.addToEnd(pElement);
     };
 

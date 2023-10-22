@@ -23,17 +23,16 @@ public:
         alto = pAlto;
         ancho = pAncho;
         profundidad = pProfundidad;
-        
     }
 
     string getName()
     {
-        return name;
+        return this->name;
     }
 
     int getPeso()
     {
-        return peso;
+        return this->peso;
     }
 };
 
