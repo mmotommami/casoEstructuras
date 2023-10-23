@@ -1,3 +1,5 @@
+#ifndef _PEDIDO_
+#define _PEDIDO_
 
 #include <string>
 #include "lista.h"     // Incluye el archivo de encabezado "lista.h", que contiene definiciones relacionadas con listas.
@@ -97,3 +99,5 @@ public:
     }
 */
 };
+
+#endif

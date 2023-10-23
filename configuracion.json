@@ -80,10 +80,10 @@
     "pedidos" : 
     {
         "minPedidos" : 5,
-        "maxPedidos" : 20,
+        "maxPedidos" : 10,
         "tiempoEntreGeneracion" : 120,
         "minColchonesPorPedido" : 10,
-        "maxColchonesPorPedido" : 100,
+        "maxColchonesPorPedido" : 50,
         "tiempoEntreEnvioDePedidos" : 10
     }
 }

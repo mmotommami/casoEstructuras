@@ -2,18 +2,28 @@
 #define _FLOTILLA_ 0
 
 #include "lista.h"
+#include "Camion.h"
+#include <vector>
 
 using namespace std;
 
 class Flotilla
 {
 private:
-    metodos* camiones;  //metodos<Camion *> *camiones
+    vector<Camion> camiones;  //metodos<Camion *> *camiones
 
 public:
-    void enviar(metodos pColchones) //metodos<Colchon *> pColchones
+    Flotilla(vector<Camion> pCamiones) {
+        camiones = pCamiones;
+    }
+
+    void enviar(Camion pCamion) //metodos<Colchon *> pColchones
     {
         // ver los camiones disponibles para enviar los colchones
+    }
+
+    void asignarCarga(vector<Colchon> pVector) {
+        
     }
 };
 

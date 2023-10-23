@@ -3,6 +3,9 @@
 
 #include "lista.h"
 #include "Stack.h"
+#include "Colchon.h"
+#include <vector>
+
 
 using namespace std;
 
@@ -12,13 +15,14 @@ private:
     int capacidad;
     int ancho;
     int largo;
-    Stack cajon;  //Stack<Colchon *> cajon;
+    vector<Colchon> cajon;
     int id;
     bool available;
 
 public:
-    Camion(int pCapacidad, int pAncho, int pLargo)
+    Camion(int pID, int pCapacidad, int pAncho, int pLargo)
     {
+        id = pID;
         capacidad = pCapacidad;
         ancho = pAncho;
         largo = pLargo;
@@ -30,6 +34,10 @@ public:
     
     bool getState() {
         return available;
+    }
+
+    void setCajon(vector<Colchon> pVector) {
+        this.cajon = pVector;
     }
 };
 

@@ -4,6 +4,8 @@
 #include "Bodega.cpp"
 #include "ConfigLoader.cpp"
 #include "Flotilla.cpp"
+#include "TarimaGroup2.cpp"
+#include "Bodega2.cpp"
 
 #include <chrono>
 #include <thread>
@@ -15,9 +17,12 @@ class Simulador
 private:
     Configuracion config;
     TarimaGroup *tarimaGroup;
+    TarimaGroup2 *tarima;
     Flotilla *flotilla;
     Pedido *pedido;
-    Bodega *labogeda;
+    Bodega2 *labodega2;
+    Bodega2 *bodegaCarga;
+    
 
 public:
     Simulador()
@@ -28,10 +33,20 @@ public:
     void initSimulation()
     {
 //        config = ConfigLoader::LoadConfig();
-        tarimaGroup = new TarimaGroup();
-        flotilla = new Flotilla();
-        tarimaGroup->rellenar();
-        labogeda = new Bodega(tarimaGroup);
+//        tarimaGroup = new TarimaGroup();
+        tarima = new TarimaGroup2();
+        Bodega2 *labodega2 = new Bodega2();
+        flotilla = new Flotilla(generarCamiones());
+        tarima->rellenar2();
+//        tarima->prueba();
+        
+        
+//        labodega2->pruebaBodega();
+        labodega2->generarPedidos();
+        labodega2->atenderPedido();
+        
+//        tarimaGroup->rellenar();
+//        labogeda = new Bodega(tarimaGroup);
 //        tarimaGroup->rellenar(); 
         //tarimaGroup->rellenar();
         
@@ -41,16 +56,30 @@ public:
         
         std::cout << "pi" << std::endl;  //Lo ideal sería poder pasar tarimaGroup dentro de labodega,
                                          //porque al parecer tarima group si tiene las cosas bien
-        std::cout << tarimaGroup->sizeOfTarima() << std::endl;
+//        std::cout << tarimaGroup->sizeOfTarima() << std::endl;
         std::cout << "pi" << std::endl;
 
+/*
         Stack* stack = tarimaGroup->sacarTarima();
         std::cout << stack->largoPila() << std::endl;
+*/
 
-        labogeda->generarPedidos();
+//        labogeda->generarPedidos();
 //        std::thread thread_generarP;
-        labogeda->atenderPedido();
+//        labogeda->atenderPedido();
 //        std::thread thread_atenderP;
+    }
+
+    vector<Camion> generarCamiones() {
+        vector<Camion> vectorCamion;
+        for(int r = 0; r < config.camion.cantidadCamiones; r++) {
+            int capacity = config.camion.capacidad;
+            int width = config.camion.ancho;
+            int length = config.camion.longitud;
+            Camion camion = new Camion(r, capacity, width, length);
+            vectorCamion.push_back(camion);
+        }
+        return vectorCamion;
     }
 
     void thread_rellenar() {
@@ -67,7 +96,7 @@ public:
         
         while(true)
         {
-            labogeda->generarPedidos();
+            labodega2->generarPedidos();
             std::this_thread::sleep_for(std::chrono::seconds(config.pedidos.tiempoEntreGeneracion));
         }
         
@@ -77,7 +106,7 @@ public:
         
         while(true)
         {
-            labogeda->atenderPedido();
+            labodega2->atenderPedido();
             std::this_thread::sleep_for(std::chrono::seconds(config.pedidos.tiempoEntreEnvioDePedidos));
         }
         
