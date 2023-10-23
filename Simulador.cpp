@@ -76,7 +76,8 @@ public:
             int capacity = config.camion.capacidad;
             int width = config.camion.ancho;
             int length = config.camion.longitud;
-            Camion camion = new Camion(r, capacity, width, length);
+            Camion* camionPtr = new Camion(r, capacity, width, length);
+            Camion camion = *camionPtr;
             vectorCamion.push_back(camion);
         }
         return vectorCamion;

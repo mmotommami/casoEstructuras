@@ -184,6 +184,7 @@ public:
                     Colchon colchon = carga4.back();
                     pedidoGeneral.push_back(colchon);
                 }
+                
                 std::cout << "Hola, mundo!!!!" << std::endl;
                 std::cout << "Hola, mundo!!!!" << std::endl;
 
