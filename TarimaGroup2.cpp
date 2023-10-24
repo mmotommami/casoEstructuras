@@ -7,6 +7,8 @@
 #include "ConfigLoader.cpp"
 #include <vector>
 #include "lista.h"
+#include <thread>
+#include <chrono>
 
 using namespace std;
 
@@ -24,6 +26,7 @@ public:
     TarimaGroup2()
     {
         config = ConfigLoader::LoadConfig();
+//        std::thread hiloSecundario(thread_rellenar);
     }
 
     void rellenar2() {
@@ -77,6 +80,17 @@ public:
         Colchon colchonPrueba = prueba.back();
         std::cout << colchonPrueba.getName() << std::endl;
         std::cout << "-ñ-ñ-ñ-" << std::endl;
+    }
+
+    void thread_rellenar() {
+        
+        while(true)
+        {
+            rellenar2();
+            std::this_thread::sleep_for(std::chrono::seconds(config.bodega.refillTime));
+            std::cout << "Se rellenó" << std::endl;
+        }
+        
     }
 
 };

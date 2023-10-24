@@ -12,6 +12,8 @@
 
 using namespace std;
 
+Flotilla flotilla;
+
 class Simulador
 {
 private:
@@ -36,7 +38,8 @@ public:
 //        tarimaGroup = new TarimaGroup();
         tarima = new TarimaGroup2();
         Bodega2 *labodega2 = new Bodega2();
-        flotilla = new Flotilla(generarCamiones());
+        flotilla = new Flotilla();
+        flotilla->generarCamiones();
         tarima->rellenar2();
 //        tarima->prueba();
         
@@ -70,18 +73,6 @@ public:
 //        std::thread thread_atenderP;
     }
 
-    vector<Camion> generarCamiones() {
-        vector<Camion> vectorCamion;
-        for(int r = 0; r < config.camion.cantidadCamiones; r++) {
-            int capacity = config.camion.capacidad;
-            int width = config.camion.ancho;
-            int length = config.camion.longitud;
-            Camion* camionPtr = new Camion(r, capacity, width, length);
-            Camion camion = *camionPtr;
-            vectorCamion.push_back(camion);
-        }
-        return vectorCamion;
-    }
 
     void thread_rellenar() {
         

@@ -12,6 +12,8 @@
 #include "Stack.h"
 #include <string>
 #include <iostream>
+#include <thread>
+#include <chrono>
 
 using namespace std;
 
@@ -86,8 +88,11 @@ public:
     {
         Pedido nuevoPedido;
 
+        vector<int> tiempoPedido = config.rutas.tiempo;
+
         int minPedidos = config.pedidos.minPedidos;
         int maxPedidos = config.pedidos.maxPedidos;
+
 /*
         int tiempoGeneracion = infoPedidos.tiempoEntreGeneracion; 
         Este tiempo de generacion no va aquí, este debe ser sacado en el simulador,
@@ -95,6 +100,7 @@ public:
 */
         int minColchones = config.pedidos.minColchonesPorPedido;
         int maxColchones = config.pedidos.maxColchonesPorPedido;
+        
 /*
         int tiempoEntreEnvioDePedidos = infoPedidos.tiempoEntrePedidos;
         Al igual que el tiempo de generacion, este dato no debe ser sacado aquí, este dato debe
@@ -104,6 +110,19 @@ public:
         srand(time(NULL));
 
         int randomCantidadPedidos = minPedidos + rand() % (maxPedidos + 1 - minPedidos);
+        
+        int num=rand()%4;
+
+        std::cout << num << std::endl;
+        
+
+        int ruta = tiempoPedido.at(num);
+
+        std::cout << "." << std::endl;
+
+        nuevoPedido.setTiempo(ruta);
+
+        std::cout << "." << std::endl;
 
         for(int i = 0; i < randomCantidadPedidos; i++) {
             int randomCantidadColchonesFull = minColchones + rand() % (maxColchones + 1 - minColchones);
@@ -135,6 +154,7 @@ public:
             Pedido pedidoAnalizado = listaDePedidos.back();
             listaDePedidos.pop_back();
 
+            int tiempo = pedidoAnalizado.getTiempo();
             int cantidadFull = pedidoAnalizado.getCantidadColchonesFull();
             int cantidadKing = pedidoAnalizado.getCantidadColchonesKing();
             int cantidadQueen = pedidoAnalizado.getCantidadColchonesQueen();
@@ -186,6 +206,7 @@ public:
                 }
                 
                 std::cout << "Hola, mundo!!!!" << std::endl;
+//              asignarCarga(pedidoGeneral, tiempo);
                 std::cout << "Hola, mundo!!!!" << std::endl;
 
                 //Si un pedido es realizado, se revisa si listaAuxiliar.size() == 0, si es el caso todo bien, pero
@@ -264,6 +285,8 @@ public:
             std::string nombre = colchonSacado.getName();
             if(nombre == pNombre && sizeVectorColchones >= pCantidadColchon){
                 for(int k = 0; k < pCantidadColchon; k++) {
+                    std::cout << "Un colchon ha sido cargado" << std::endl;
+                    std::this_thread::sleep_for(std::chrono::milliseconds(7));
                     camion.push_back(colchonSacado);
                     vectorColchones.pop_back();
                 }
@@ -332,7 +355,7 @@ public:
 
         return camion;
     }
-*/
+
 
     Colchon* sacarColchonDeTarima(Stack pTarima)
     {
@@ -365,10 +388,11 @@ public:
         std::cout << colchonSinPtr.getPeso() << std::endl;
         std::cout << "metodo manipulateTarimas" << std::endl;
         // Perform any operations you need with colchon
-        */
+        
         }
 
     }
+*/
     
 };
 

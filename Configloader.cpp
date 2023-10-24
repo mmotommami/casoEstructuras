@@ -220,6 +220,11 @@ public:
         config.ruta4.distancia = ruta4Data["distancia"];
         config.ruta4.tiempo = ruta4Data["tiempo"];
 
+        config.rutas.tiempo.push_back(config.ruta1.tiempo);
+        config.rutas.tiempo.push_back(config.ruta2.tiempo);
+        config.rutas.tiempo.push_back(config.ruta3.tiempo);
+        config.rutas.tiempo.push_back(config.ruta4.tiempo);
+
         // Cargar datos de bodega
         const auto& bodegaData = json_data["bodega"];
         config.bodega.Twin = bodegaData["Twin"];

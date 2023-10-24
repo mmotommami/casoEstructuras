@@ -12,7 +12,8 @@ using namespace std;
 class Pedido
 {
 private:
-    int number;         // Almacena el número de pedido.
+    int tiempo;
+    int number;
     int cantidadColchonesFull;
     int cantidadColchonesKing;
     int cantidadColchonesQueen;
@@ -42,6 +43,12 @@ public:
         */
     }
 
+    // Getter para el tiempo
+    int getTiempo() const
+    {
+        return tiempo;
+    }
+
     // Getter para la cantidad de colchones Full.
     int getCantidadColchonesFull() const
     {
@@ -64,6 +71,11 @@ public:
     int getCantidadColchonesTwin() const
     {
         return cantidadColchonesTwin;
+    }
+
+    void setTiempo(int pTiempo)
+    {
+        tiempo = pTiempo;
     }
 
     void setCantidadColchonesFull(int cantidad)

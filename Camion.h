@@ -55,13 +55,36 @@ public:
         this->cajon = pVector;
     }
 
+    int getSizeCajon() {
+        int size = cajon.size();
+        return size;
+    }
+
+    bool cajonVacio() {
+        if(cajon.size() == 0) {
+            setStateTrue();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     void addCajon(Colchon pColchon) {
         cajon.push_back(pColchon);
         int peso = pColchon.getPeso();
         this->currentCapacity = currentCapacity + peso;
         if(currentCapacity >= capacidad) {
-            available = false;
+            setStateFalse();
         }
+    }
+
+    Colchon removeCajon() {
+        Colchon colchon = cajon.back();
+        cajon.pop_back();
+        if(cajonVacio()){
+            setStateTrue();
+        }
+        return colchon;
     }
 };
 
