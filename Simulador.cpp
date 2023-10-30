@@ -34,10 +34,10 @@ public:
         labogeda = new Bodega(tarimaGroup);
 //        tarimaGroup->rellenar(); 
         //tarimaGroup->rellenar();
-        
-//        std::thread hiloRellenar(thread_rellenar);
+                
+        std::thread hiloRellenar(&Simulador::thread_rellenar);
 
-//        hiloRellenar.join();
+        hiloRellenar.join();
         
         std::cout << "pi" << std::endl;  //Lo ideal sería poder pasar tarimaGroup dentro de labodega,
                                          //porque al parecer tarima group si tiene las cosas bien
@@ -45,9 +45,9 @@ public:
         std::cout << "pi" << std::endl;
 
         labogeda->generarPedidos();
-//        std::thread thread_generarP;
+        std::thread thread_generarP;
         labogeda->atenderPedido();
-//        std::thread thread_atenderP;
+        std::thread thread_atenderP;
     }
 
     void thread_rellenar() {
